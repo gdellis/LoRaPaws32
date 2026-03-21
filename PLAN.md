@@ -109,7 +109,7 @@ pub fn read_fix(&mut self, timeout_ms: u32) -> Result<GpsData>;
 
 **Dependencies**: `embedded-nmea0183` crate for parsing
 
-**Test**: 
+**Test**:
 - GPS powered on, receives NMEA on UART
 - Fix extracted (timeout after 60s returns `valid: false`)
 
@@ -255,7 +255,7 @@ pub fn save_config(config: &TrackerConfig) -> Result<()>;
 
 **Stored keys**:
 - `device_id` (u32)
-- `sleep_interval_ms` (u32) 
+- `sleep_interval_ms` (u32)
 - `stationary_interval_ms` (u32)
 - `tx_power` (u8)
 - `sf` (u8)
@@ -349,7 +349,7 @@ from sx1262 import SX1262
 def main():
     lora = SX1262(spi_bus=0, spi_device=0)
     lora.receive_mode()
-    
+
     while True:
         packet = lora.recv(timeout_ms=1000)
         if packet:
