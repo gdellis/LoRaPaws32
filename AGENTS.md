@@ -17,7 +17,7 @@ For detailed guidelines, see:
   - [rust.md](.agents/rules/rust.md) - Rust conventions
   - [git.md](.agents/rules/git.md) - Git workflow
   - [github.md](.agents/rules/github.md) - GitHub workflow
-  - [mardown.md](.agents/rules/mardown.md) - Markdown guidelines
+  - [markdown.md](.agents/rules/markdown.md) - Markdown guidelines
 
 ## Pre-Commit Hooks
 
