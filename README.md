@@ -26,18 +26,12 @@ See [DESIGN.md](DESIGN.md) for full hardware documentation.
 
 ## Architecture
 
-```
-┌─────────────┐     LoRa      ┌──────────────┐    MQTT    ┌─────────┐
-│   Tracker   │ ─────────────►│ Base Station │ ─────────►│ HiveMQ  │
-│  (ESP32S3)  │               │ (Raspberry   │            │  Broker │
-│             │◄─── BLE ─────│    Pi)       │            └─────────┘
-└─────────────┘               └──────────────┘
-                                  │
-                                  ▼
-                            ┌──────────┐
-                            │  Web UI  │
-                            │ (Flask)  │
-                            └──────────┘
+```mermaid
+flowchart LR
+    T[Tracker<br/>ESP32S3] <-->|BLE| P[Phone]
+    T -->|LoRa| B[Base Station<br/>Raspberry Pi]
+    B -->|MQTT| H[(HiveMQ<br/>Broker)]
+    B -->|HTTP| W[Web UI<br/>Flask]
 ```
 
 See [DESIGN.md](DESIGN.md) for detailed software architecture.
