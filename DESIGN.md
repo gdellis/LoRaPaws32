@@ -99,6 +99,7 @@ LiPo (3.7V) → MCP1700 (3.3V) → XIAO + Wio-SX1262
 The tracker firmware is event-driven, built on ESP-IDF's FreeRTOS. Most time is spent in deep sleep; on wake, the system acquires GPS, transmits via LoRa, then returns to sleep.
 
 ```mermaid
+%%{init: {'theme':'dark'}}%%
 stateDiagram-v2
     [*] --> BOOT
     BOOT --> IDLE
@@ -311,6 +312,7 @@ All heavy processing deferred to main task.
 Raspberry Pi with LoRa hat (e.g., Raspberry Pi LoRa HAT):
 
 ```mermaid
+%%{init: {'theme':'dark'}}%%
 flowchart LR
     A[LoRa RX] --> B[Python Parser]
     B --> C[MQTT Bridge]
@@ -366,6 +368,7 @@ A lightweight Flask web server runs on the Raspberry Pi, providing:
 **Web UI Architecture**:
 
 ```mermaid
+%%{init: {'theme':'dark'}}%%
 flowchart TB
     subgraph Pi["Raspberry Pi"]
         A[Flask Server] --> B[SQLite DB]
@@ -479,6 +482,7 @@ With SF7 + BW125k, ~20 bytes transmits in ~50–100 ms. At +17 dBm, TX current ~
 Mobile app connects to HiveMQ broker via base station's MQTT bridge to receive location updates and send commands.
 
 ```mermaid
+%%{init: {'theme':'dark'}}%%
 flowchart LR
     T[Tracker] -->|LoRa| B[Base Station]
     B -->|MQTT| H[(HiveMQ<br/>Broker)]
