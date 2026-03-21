@@ -572,6 +572,58 @@ See [BOM.md](BOM.md) for full component list with part numbers, pricing, vendor 
 
 ---
 
+## PCB Design Tools
+
+For designing the tracker PCB or base station carrier board.
+
+### Full-Suite EDA Tools
+
+| Tool | Platform | Cost | AI Features | Strengths | Weaknesses |
+|------|----------|------|------------|------------|------------|
+| **KiCad** | Windows/Mac/Linux | Free, open-source | Community plugins | Full schematic capture, large library, no restrictions | Steep learning curve |
+| **EasyEDA** | Web + Desktop | Free tier | AI-assisted routing, auto-placement | Cloud-based, large part library, AI features | Data stored on cloud, limited export options |
+| **Altium Designer** | Windows | ~$7k/year | AI rule checking, auto-routing | Industry standard, powerful DRC, extensive features | Expensive, Windows only |
+| **Cadence OrCAD** | Windows | ~$10k+ | AI optimization | Enterprise-grade, best for complex RF/high-speed | Very expensive, complex workflow |
+| **Flux AI** | Web | Free tier available | AI schematic generation, auto-routing | Modern UI, AI-native design | Relatively new, library may be limited |
+| **Upverter** | Web | Free tier | AI-assisted design | Collaborative, cloud-based, Git integration | Requires internet, limited offline use |
+| **Mentor Graphics (NX)** | Windows | Expensive | AI routing optimization | Best for complex multi-layer boards | Cost prohibitive for hobbyists |
+
+### PCB Routing-Specific AI Tools
+
+| Tool | Cost | Best For | Limitations |
+|------|------|---------|-------------|
+| **RouterAI** | Free tier | Optimized auto-routing | Limited to routing only |
+| **DeepRoute** | Free tier | High-density PCBs | Schematic entry separate |
+
+### Recommendations for This Project
+
+For a simple 2-layer pet tracker PCB:
+
+1. **EasyEDA** (easiest to start, AI-assisted placement/routing)
+2. **KiCad** (full control, no cloud dependency)
+3. **Flux AI** (modern AI features, good for prototyping)
+
+For the base station carrier board with Raspberry Pi header:
+- **KiCad** (best for open-source, full control)
+- **EasyEDA** (faster for simple boards)
+
+### When AI PCB Tools Help
+
+- Initial component placement suggestions
+- Basic auto-routing for 2-layer boards
+- Design rule checking
+- Manufacturing file generation (Gerber, drill files)
+
+### When Human Expertise Still Required
+
+- High-speed signal integrity (DDR, USB, RF)
+- Multi-layer boards (4+ layers)
+- Antenna/RF design
+- Differential pair routing
+- EMI/EMC optimization
+
+---
+
 ## TODO Before Build
 
 - [x] ~~Select final board~~ → **XIAO ESP32S3** (FPU, BLE, more RAM)
