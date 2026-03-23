@@ -9,6 +9,8 @@
 build/
 dist/
 target/
+.embuild/
+target-esp/
 
 # IDE
 .vscode/
