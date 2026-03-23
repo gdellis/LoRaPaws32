@@ -21,8 +21,8 @@ fn main() -> ! {
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
     let peripherals = esp_hal::init(config);
 
-    let mut led = Led::new(peripherals.GPIO48);
-    let gpio = Gpio::new(peripherals.GPIO0);
+    let mut led = Led::new(peripherals.GPIO8);
+    let gpio = Gpio::new(peripherals.GPIO9);
 
     led.off();
     let mut led_state = false;
