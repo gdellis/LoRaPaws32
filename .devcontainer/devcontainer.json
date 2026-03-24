@@ -1,9 +1,6 @@
 {
     "name": "ESP32 Pet Tracker",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": ".."
-    },
+    "image": "espressif/idf:v5.3.1",
     "customizations": {
         "vscode": {
             "extensions": [

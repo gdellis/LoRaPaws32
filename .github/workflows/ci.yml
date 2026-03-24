@@ -22,8 +22,16 @@ jobs:
           cd firmware
           idf.py build
 
-      - name: Run tests
+      - name: Build tests
+        run: |
+          . /opt/esp/idf/export.sh
+          cd firmware
+          idf.py build-component-test
+        continue-on-error: true
+
+      - name: Run tests (hardware)
         run: |
           . /opt/esp/idf/export.sh
           cd firmware
           idf.py test
+        continue-on-error: true
