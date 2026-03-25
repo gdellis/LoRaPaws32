@@ -176,3 +176,66 @@ When modifying ESP-IDF dependencies:
 - `nvs_flash` - Non-volatile storage
 - `esp_bt` - Bluetooth
 - `esp_wifi` - WiFi
+
+## Documentation Maintenance
+
+### Keeping PLAN.md Updated
+
+After completing any feature, bug fix, or significant change:
+
+1. **Mark completed items** in `docs/hardware/PLAN.md`:
+   - Phase sections (2.1, 2.2, etc.) - Add `- [x] **Done**` with PR reference
+   - Unit test sections - Mark tests as done when passing
+   - Update the Implementation Order Summary table
+
+2. **Update relevant sections**:
+   - Phase subsections with completion status and PR numbers
+   - Bug fixes noted in appropriate modules
+   - New tests added to host-based unit tests list
+
+3. **Example updates**:
+
+   ```markdown
+   ### 2.4 Button Handler (Day 1)
+   ...
+   - [x] **Done** - Implemented in `button_handler.cpp`, merged PR #3
+   - [x] **Bug Fixed**: Debounce bug (first press always failed) resolved by proper initialization to `-INT64_MAX`
+   ```
+
+   ```markdown
+   | Phase | Module | Status |
+   |-------|--------|--------|
+   | 2 | Button handler with debounce | ✅ Done (bug fixed, PR #3) |
+   ```
+
+4. **After merging a PR**: Update PLAN.md in the same commit or immediately after
+
+### Keeping DESIGN.md Updated
+
+The design document captures the current implementation architecture. Update it when:
+
+1. **Hardware changes**: New components, pin reassignments, or power architecture
+2. **Interface changes**: Modified class/function signatures in public APIs
+3. **Protocol changes**: Altered packet formats, state machine transitions
+4. **New features**: Adding modules not previously documented
+
+**What to update**:
+- Module Structure - if new files are added
+- Key Interfaces - if public APIs change
+- Pin mappings in Hardware Configuration
+- Packet structure in LoRa Protocol section
+- TODO checklist at the end
+
+**Example updates**:
+
+```markdown
+### Module Structure
+...
+- [x] ~~Implement BLE GATT server~~ → `ble.cpp` added in PR #5
+```
+
+```markdown
+| Phase | Module | Status |
+|-------|--------|--------|
+| 4 | BLE GATT server | ✅ Done (PR #5) |
+```
