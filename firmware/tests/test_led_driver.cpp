@@ -6,7 +6,6 @@
 
 TEST_CASE("LedDriver state transitions", "[led]") {
     mock_gpio::reset_gpio_mock();
-    mock_esp_timer::reset_timer_mock();
 
     SECTION("on() sets GPIO high") {
         LedDriver led(GPIO_NUM_8);

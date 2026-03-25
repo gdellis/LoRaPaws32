@@ -32,3 +32,14 @@ target_include_directories(test_button_handler PRIVATE
     ${CMAKE_SOURCE_DIR}/../main
 )
 target_link_libraries(test_button_handler PRIVATE Catch2::Catch2WithMain)
+
+add_executable(test_led_driver test_led_driver.cpp
+    src/gpio_mock.cpp
+    ${CMAKE_SOURCE_DIR}/../main/gpio_driver.cpp
+    ${CMAKE_SOURCE_DIR}/../main/led_driver.cpp
+)
+target_include_directories(test_led_driver PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/../main
+)
+target_link_libraries(test_led_driver PRIVATE Catch2::Catch2WithMain)
