@@ -23,12 +23,29 @@ For detailed guidelines, see:
 
 ```
 firmware/
-├── CMakeLists.txt       # ESP-IDF root CMake
-├── sdkconfig.defaults   # ESP-IDF configuration
-├── build.sh            # Docker-based build script
-└── main/
-    ├── CMakeLists.txt   # Main component
-    └── main.cpp         # Application entry
+├── CMakeLists.txt           # ESP-IDF root CMake
+├── sdkconfig.defaults      # ESP-IDF configuration
+├── build.sh                # Docker-based build script
+├── main/
+│   ├── CMakeLists.txt      # Main component
+│   ├── main.cpp            # Application entry
+│   ├── gpio_driver.cpp     # GPIO abstraction
+│   ├── led_driver.cpp      # LED driver
+│   ├── button_handler.cpp  # Button debounce
+│   ├── gps.cpp             # GPS NMEA parsing
+│   └── nmea_parser.hpp    # Header-only NMEA parser (testable on host)
+└── tests/
+    ├── CMakeLists.txt      # Host test CMake
+    ├── test_nmea_parser.cpp
+    ├── test_button_handler.cpp
+    ├── include/             # Mock headers for host testing
+    │   ├── esp_timer.h
+    │   ├── esp_err.h
+    │   ├── esp_log.h
+    │   └── driver/gpio.h
+    └── src/
+        ├── esp_timer_mock.cpp
+        └── gpio_mock.cpp
 ```
 
 ## Build Commands
@@ -74,7 +91,7 @@ idf.py -p /dev/ttyACM0 flash monitor
 - **Memory**: Avoid dynamic allocation; prefer stack or static buffers
 - **Concurrency**: Use FreeRTOS tasks and queues, not threads
 
-### Module Structure (Future)
+### Module Structure
 
 ```
 main/
@@ -82,10 +99,10 @@ main/
 ├── gpio_driver.cpp    # GPIO abstraction
 ├── led_driver.cpp     # LED driver
 ├── button_handler.cpp # Button debounce
-├── ble.cpp            # Bluetooth Low Energy
-├── gps.cpp            # GPS parsing
-├── lora.cpp           # LoRa SX1262 driver
-└── config.h           # Configuration constants
+├── nmea_parser.hpp   # Header-only NMEA parser
+├── gps.cpp           # GPS UART driver
+├── deep_sleep.hpp    # Deep sleep utility
+└── config.h          # Configuration constants
 ```
 
 ## Hardware Configuration
@@ -102,11 +119,46 @@ main/
 
 ## Testing
 
+### Host-Based Unit Tests (Recommended for Development)
+
+Host tests run on Linux without hardware, using mocked ESP-IDF headers.
+
 ```bash
-# Build and run tests
+# Build and run host tests
+cd firmware/tests
+mkdir -p build && cd build
+cmake .. && make -j$(nproc)
+./test_nmea_parser    # NMEA parsing tests (43 assertions)
+./test_button_handler # Button debounce tests (4 assertions)
+```
+
+### Target Tests (Requires Hardware)
+
+```bash
+cd firmware
 idf.py build
 idf.py test
 ```
+
+### Adding New Host Tests
+
+1. **Create mock headers** in `tests/include/` if new ESP-IDF dependencies are needed
+2. **Implement mock functions** in `tests/src/` following the existing pattern
+3. **Add test file** following Catch2 TEST_CASE/SECTION format
+4. **Update CMakeLists.txt** to include new test executable
+
+### Mock Maintenance
+
+When modifying ESP-IDF dependencies:
+
+| If you add... | Update these files |
+|--------------|-------------------|
+| `esp_timer_get_time()` | `tests/include/esp_timer.h`, `tests/src/esp_timer_mock.cpp` |
+| `gpio_get_level()` | `tests/include/driver/gpio.h`, `tests/src/gpio_mock.cpp` |
+| `ESP_ERROR_CHECK()` | `tests/include/esp_err.h` |
+| `ESP_LOG*` macros | `tests/include/esp_log.h` |
+
+**Key principle**: Keep mocks minimal - only mock what the code actually calls. Prefer thin wrappers around source files rather than comprehensive mocks.
 
 ## Common Issues
 
