@@ -45,12 +45,39 @@ bool Gps::parse_nmea(const char* nmea, size_t len) {
         return false;
     }
     
+    if (!validate_checksum(nmea, len)) {
+        ESP_LOGW(TAG, "NMEA checksum failed for: %.40s", nmea);
+        return false;
+    }
+    
     if (strncmp(nmea + 2, "GGA", 3) == 0) {
         return parse_gga(nmea);
     } else if (strncmp(nmea + 2, "RMC", 3) == 0) {
         return parse_rmc(nmea);
     }
     return false;
+}
+
+bool Gps::validate_checksum(const char* nmea, size_t len) {
+    const char* checksum_ptr = (const char*)memchr(nmea, '*', len);
+    if (!checksum_ptr) {
+        return true;
+    }
+    
+    size_t checksum_pos = checksum_ptr - nmea;
+    if (checksum_pos + 3 > len) {
+        return false;
+    }
+    
+    uint8_t calculated = 0;
+    for (size_t i = 1; i < checksum_pos; i++) {
+        calculated ^= nmea[i];
+    }
+    
+    char expected_str[3] = {checksum_ptr[1], checksum_ptr[2], '\0'};
+    uint8_t expected = (uint8_t)strtol(expected_str, NULL, 16);
+    
+    return calculated == expected;
 }
 
 bool Gps::parse_gga(const char* nmea) {
@@ -60,6 +87,9 @@ bool Gps::parse_gga(const char* nmea) {
         data_.fix_status = (field[0] == '1') ? GpsFixStatus::FIX_2D : 
                            (field[0] >= '2') ? GpsFixStatus::FIX_3D : 
                            GpsFixStatus::NONE;
+        if (data_.fix_status != GpsFixStatus::NONE) {
+            data_.timestamp = esp_timer_get_time();
+        }
     }
     
     if (parse_field(nmea, 7, field, sizeof(field)) > 0) {
@@ -111,8 +141,9 @@ int Gps::parse_field(const char* nmea, int field_idx, char* out, size_t out_len)
     int field_count = 0;
     size_t pos = 0;
     size_t field_start = 0;
+    size_t nmea_len = strlen(nmea);
     
-    while (pos < strlen(nmea) && field_count < field_idx) {
+    while (pos < nmea_len && field_count < field_idx) {
         if (nmea[pos] == ',') {
             field_count++;
             field_start = pos + 1;
@@ -120,13 +151,13 @@ int Gps::parse_field(const char* nmea, int field_idx, char* out, size_t out_len)
         pos++;
     }
     
-    if (field_count != field_idx || nmea[field_start] == ',' || nmea[field_start] == '*') {
+    if (field_count != field_idx || field_start >= nmea_len || nmea[field_start] == ',' || nmea[field_start] == '*') {
         out[0] = '\0';
         return 0;
     }
     
     size_t out_pos = 0;
-    while (out_pos < out_len - 1 && field_start < strlen(nmea)) {
+    while (out_pos < out_len - 1 && field_start < nmea_len) {
         if (nmea[field_start] == ',' || nmea[field_start] == '*') {
             break;
         }

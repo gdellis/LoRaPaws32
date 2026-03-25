@@ -41,6 +41,7 @@ private:
     bool parse_nmea(const char* nmea, size_t len);
     bool parse_gga(const char* nmea);
     bool parse_rmc(const char* nmea);
+    bool validate_checksum(const char* nmea, size_t len);
     int parse_field(const char* nmea, int field_idx, char* out, size_t out_len);
 
     uart_port_t uart_num_;
