@@ -18,16 +18,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  IDF_VERSION: "v6.0"
-
 jobs:
   # Build ESP-IDF firmware (runs in Docker)
   build-firmware:
     name: Build Firmware
     runs-on: ubuntu-latest
 
-    container: espressif/idf:${{ env.IDF_VERSION }}
+    container: espressif/idf:v6.0
 
     steps:
       - name: Checkout
