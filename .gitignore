@@ -38,3 +38,8 @@ npm-debug.log
 
 # Hardware backups
 hardware/**/*-backups/
+
+.cache/
+.pytest_cache/
+.ruff_cache/
+**/build/

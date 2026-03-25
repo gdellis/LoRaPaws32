@@ -16,18 +16,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    container: espressif/idf:v6.0_esp32c6
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup ESP-IDF
-        uses: espressif/setup-esp-idf@v4
-        with:
-          version: v6.0
-          espfs: false
-
       - name: Build firmware
         run: |
-          . $IDF_PATH/export.sh
+          . /opt/esp/idf/export.sh
           cd firmware
           idf.py build
