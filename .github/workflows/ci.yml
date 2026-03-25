@@ -2,7 +2,7 @@ name: Build ESP-IDF Firmware
 
 on:
   push:
-    branches: [main, feature/**, explore/**]
+    branches: [main]
     paths:
       - 'firmware/**'
       - '.github/workflows/ci.yml'
@@ -11,6 +11,10 @@ on:
     paths:
       - 'firmware/**'
       - '.github/workflows/ci.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
