@@ -1,8 +1,9 @@
-name: Scheduled OpenCode Task
+name: Todo
 
 on:
-  schedule:
-    - cron: "0 9 * * 1" # Every Monday at 9am UTC
+  workflow_dispatch
+  # schedule:
+  #   - cron: "0 9 * * 1" # Every Monday at 9am UTC
 
 jobs:
   opencode:
