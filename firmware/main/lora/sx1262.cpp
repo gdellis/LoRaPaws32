@@ -2,8 +2,8 @@
 #include "esp_log.h"
 #include "esp_rom_gpio.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/event_groups.h"
 #include "freertos/timers.h"
+#include "freertos/event_groups.h"
 #include <string.h>
 
 static const char* TAG = "sx1262";
