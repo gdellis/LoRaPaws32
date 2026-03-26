@@ -48,7 +48,8 @@ typedef struct spi_device_t* spi_device_handle_t;
 #define SPI_TRANS_USE_RXDATA (1 << 1)
 #define SPI_DMA_CH_AUTO -1
 #define ESP_OK 0
-#define ESP_ERR_INVALID_ARG 0x102
+#define ESP_ERR_INVALID_ARG 0x101
+#define ESP_ERR_INVALID_STATE 0x102
 
 #ifdef __cplusplus
 extern "C" {
