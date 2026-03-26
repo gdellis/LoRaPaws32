@@ -1,6 +1,13 @@
 #pragma once
 
 #include <stdint.h>
+#include <string.h>
+#include "esp_err.h"
+#include "esp_bt.h"
+#include "esp_gap_ble_api.h"
+#include "esp_gatts_api.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 
 constexpr uint16_t BLE_SERVICE_UUID = 0x1810;
 constexpr uint16_t BLE_CHAR_LOCATION_UUID = 0x2A67;
@@ -30,7 +37,7 @@ public:
     esp_err_t update_location(const BleLocationData& location);
     esp_err_t set_device_name(const char* name);
 
-    bool is_connected() const { return connected_; }
+    bool is_connected() const;
 
 private:
     static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t* param);
@@ -41,9 +48,11 @@ private:
     
     void register_app();
     void create_services();
-    void send_location_response(uint16_t conn_id, uint16_t trans_id);
+    void add_characteristics();
+    void start_advertising();
+    void send_location_response(uint16_t conn_id, uint16_t trans_id, uint16_t handle);
     
-    static constexpr size_t MAX_CONNECTIONS = 2;
+    SemaphoreHandle_t mutex_;
     
     uint16_t service_handle_ = 0;
     uint16_t location_char_handle_ = 0;
@@ -51,6 +60,7 @@ private:
     uint16_t connection_id_ = 0;
     bool connected_ = false;
     bool started_ = false;
+    bool initialized_ = false;
     
     char device_name_[BLE_DEVICE_NAME_MAX] = "PetTracker";
     BleLocationData current_location_ = {};
