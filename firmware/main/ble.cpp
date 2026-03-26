@@ -266,6 +266,23 @@ void BleServer::send_location_response(uint16_t conn_id, uint16_t trans_id, uint
     esp_ble_gatts_send_response(service_handle_, conn_id, trans_id, ESP_GATT_OK, &rsp);
 }
 
+void BleServer::send_name_response(uint16_t conn_id, uint16_t trans_id, uint16_t handle) {
+    if (xSemaphoreTake(mutex_, pdMS_TO_TICKS(100)) != pdTRUE) {
+        return;
+    }
+    
+    size_t name_len = strlen(device_name_);
+    
+    xSemaphoreGive(mutex_);
+    
+    esp_gatt_rsp_t rsp = {};
+    rsp.attr_value.len = name_len;
+    rsp.attr_value.handle = handle;
+    memcpy(rsp.attr_value.value, device_name_, name_len);
+    
+    esp_ble_gatts_send_response(service_handle_, conn_id, trans_id, ESP_GATT_OK, &rsp);
+}
+
 void BleServer::gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t* param) {
     if (instance_) {
         instance_->on_gatts_event(event, gatts_if, param);
@@ -312,6 +329,8 @@ void BleServer::on_gatts_event(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         case ESP_GATTS_READ_EVT:
             if (param->read.handle == location_char_handle_) {
                 send_location_response(param->read.conn_id, param->read.trans_id, param->read.handle);
+            } else if (param->read.handle == name_char_handle_) {
+                send_name_response(param->read.conn_id, param->read.trans_id, param->read.handle);
             }
             break;
             
@@ -327,6 +346,16 @@ void BleServer::on_gatts_event(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
                     xSemaphoreGive(mutex_);
                     ESP_LOGI(TAG, "Device name updated: %s", device_name_);
                 }
+            }
+            break;
+            
+        case ESP_GATTS_ADD_CHAR_EVT:
+            if (param->add_char.char_uuid.uuid.uuid16 == BLE_CHAR_LOCATION_UUID) {
+                location_char_handle_ = param->add_char.attr_handle;
+                ESP_LOGI(TAG, "Location characteristic added with handle %d", location_char_handle_);
+            } else if (param->add_char.char_uuid.uuid.uuid16 == BLE_CHAR_NAME_UUID) {
+                name_char_handle_ = param->add_char.attr_handle;
+                ESP_LOGI(TAG, "Name characteristic added with handle %d", name_char_handle_);
             }
             break;
             

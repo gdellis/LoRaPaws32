@@ -51,6 +51,7 @@ private:
     void add_characteristics();
     void start_advertising();
     void send_location_response(uint16_t conn_id, uint16_t trans_id, uint16_t handle);
+    void send_name_response(uint16_t conn_id, uint16_t trans_id, uint16_t handle);
     
     SemaphoreHandle_t mutex_;
     
