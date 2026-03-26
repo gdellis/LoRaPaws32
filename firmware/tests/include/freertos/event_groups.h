@@ -24,7 +24,7 @@ EventBits_t xEventGroupWaitBits(
     TickType_t xTicksToWait
 );
 EventBits_t xEventGroupSetBits(EventGroupHandle_t xEventGroup, EventBits_t bitsToSet);
-EventBits_t xEventGroupClearBits(EventGroupHandle_t xEventGroup, EventBits_t bitsToClear);
+EventBits_t xEventGroupClearBits(EventGroupHandle_t xEventGroup, const EventBits_t bitsToClear);
 EventBits_t xEventGroupSetBitsFromISR(EventGroupHandle_t xEventGroup, EventBits_t bitsToSet, BaseType_t* higher_priority_task_woken);
 
 #endif

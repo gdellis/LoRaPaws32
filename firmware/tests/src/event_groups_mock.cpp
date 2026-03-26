@@ -33,7 +33,7 @@ EventBits_t xEventGroupSetBits(EventGroupHandle_t xEventGroup, EventBits_t bitsT
     return current_bits;
 }
 
-EventBits_t xEventGroupClearBits(EventGroupHandle_t xEventGroup, EventBits_t bitsToClear) {
+EventBits_t xEventGroupClearBits(EventGroupHandle_t xEventGroup, const EventBits_t bitsToClear) {
     (void)xEventGroup;
     current_bits &= ~bitsToClear;
     return current_bits;

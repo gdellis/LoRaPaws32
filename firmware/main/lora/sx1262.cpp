@@ -3,6 +3,7 @@
 #include "esp_rom_gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
+#include "freertos/timers.h"
 #include <string.h>
 
 static const char* TAG = "sx1262";
@@ -82,14 +83,15 @@ LoRaDriver::LoRaDriver(spi_host_device_t spi_host, gpio_num_t mosi, gpio_num_t m
                        gpio_num_t sclk, gpio_num_t nss, gpio_num_t reset,
                        gpio_num_t busy, gpio_num_t dio1)
     : spi_host_(spi_host)
+    , spi_(nullptr)
     , mosi_(mosi), miso_(miso), sclk_(sclk), nss_(nss)
     , reset_(reset), busy_(busy), dio1_(dio1)
+    , event_group_(xEventGroupCreateStatic(&event_group_buffer_))
     , mode_(LoRaMode::SLEEP)
     , frequency_(LORA_DEFAULT_FREQ)
     , tx_power_(LORA_DEFAULT_TX_POWER)
     , spreading_factor_(7)
     , callback_(nullptr)
-    , event_group_(xEventGroupCreateStatic(&event_group_buffer_))
 {
 }
 
