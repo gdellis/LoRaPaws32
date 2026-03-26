@@ -1,5 +1,4 @@
 #include "driver/gpio.h"
-#include "driver/gpio_isr.h"
 
 namespace mock_gpio {
 
