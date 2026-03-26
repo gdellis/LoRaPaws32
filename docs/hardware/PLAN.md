@@ -172,6 +172,7 @@ bool parse_nmea(const char* nmea, GpsData* out);
 ```
 
 - [x] **Done** - Implemented in `gps.cpp` and `nmea_parser.hpp`, merged PR #2
+- [x] **Updated** - Baud rate changed from 9600 to 115200 for M100-5883 compatibility
 - [x] **Bugs Fixed**: NMEA sentence type detection (`nmea + 3`), field index offset, buffer size issues
 
 **Test**:
@@ -495,7 +496,7 @@ def geofences():
 - **Target MCU**: ESP32-C6 (RISC-V)
 - **LoRa driver**: Custom SX1262 driver (SPI interface)
 - **GPS parsing**: Custom header-only NMEA parser (`nmea_parser.hpp`)
-- **GPS module**: NEO-6M (25 mA, cheap, reliable)
+- **GPS module**: HGLRC M100-5883 (M10, 10Hz, 115200 baud, 72ch, multi-GNSS)
 - **LoRa frequency**: 915 MHz (US region)
 - **BLE fallback**: Included for direct phone connectivity when in range
 - **Accelerometer**: LIS3DH for motion detection (wake on movement)
