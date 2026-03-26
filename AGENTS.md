@@ -105,6 +105,21 @@ idf.py -p /dev/ttyACM0 flash monitor  # Flash and monitor
 - **Error handling**: Use `ESP_ERROR_CHECK()` for ESP-IDF errors
 - **C++ features**: Use classes for driver abstraction, avoid raw pointers
 
+### Documentation
+
+- **Doxygen docstrings**: Add Doxygen-style comments to all public APIs:
+  ```cpp
+  /**
+   * @brief Initialize the GPS module
+   * @param uart_num UART peripheral number
+   * @return ESP_OK on success, error code otherwise
+   */
+  esp_err_t init(uart_port_t uart_num);
+  ```
+- **File headers**: Add brief description at top of each source file
+- **Inline comments**: Explain *why*, not *what* - code should be self-documenting for *what*
+- **TODO format**: Use `// TODO(username): description` for future work
+
 ### ESP-IDF Specific
 
 - **Panics**: In embedded context, use `ESP_LOGW` or `ESP_LOGE` for errors
