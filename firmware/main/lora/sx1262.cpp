@@ -40,6 +40,19 @@ static constexpr uint8_t SX1262_IRQ_CAD_DETECTED = 0x08;
 static constexpr uint8_t SX1262_IRQ_TIMEOUT = 0x40;
 static constexpr uint8_t SX1262_IRQ_ALL = 0xFF;
 
+static constexpr uint8_t SX1262_MODEM_CONFIG1_DEFAULT = 0x70;
+static constexpr uint8_t SX1262_MODEM_CONFIG2_DEFAULT = 0x74;
+static constexpr uint8_t SX1262_MODEM_CONFIG2_CRC_ON = 0x04;
+
+static constexpr uint8_t SX1262_SF_5 = 0x50;
+static constexpr uint8_t SX1262_SF_6 = 0x60;
+static constexpr uint8_t SX1262_SF_7 = 0x70;
+static constexpr uint8_t SX1262_SF_8 = 0x80;
+static constexpr uint8_t SX1262_SF_9 = 0x90;
+static constexpr uint8_t SX1262_SF_10 = 0xA0;
+static constexpr uint8_t SX1262_SF_11 = 0xB0;
+static constexpr uint8_t SX1262_SF_12 = 0xC0;
+
 const char* LoRaDriver::mode_to_string(LoRaMode mode) {
     switch (mode) {
         case LoRaMode::SLEEP: return "SLEEP";
@@ -132,13 +145,10 @@ esp_err_t LoRaDriver::configure_modem() {
     uint8_t pkt_type = SX1262_PKT_TYPE_LORA;
     ESP_ERROR_CHECK(write_reg(SX1262_CMD_SET_PKT_TYPE, &pkt_type, 1));
 
-    uint8_t modem_cfg1 = 0x70;
-    uint8_t modem_cfg2 = 0x74;
+    write_reg(SX1262_REG_LORA_MODEM_CONFIG1, SX1262_MODEM_CONFIG1_DEFAULT);
+    write_reg(SX1262_REG_LORA_MODEM_CONFIG2, SX1262_MODEM_CONFIG2_DEFAULT | SX1262_MODEM_CONFIG2_CRC_ON);
 
-    write_reg(SX1262_REG_LORA_MODEM_CONFIG1, modem_cfg1);
-    write_reg(SX1262_REG_LORA_MODEM_CONFIG2, modem_cfg2);
-
-    uint16_t preamble = 8;
+    uint16_t preamble = LORA_DEFAULT_PREAMBLE_LENGTH;
     write_reg(SX1262_REG_LORA_PREAMBLE_MSB, (preamble >> 8) & 0xFF);
     write_reg(SX1262_REG_LORA_PREAMBLE_LSB, preamble & 0xFF);
 
@@ -208,14 +218,14 @@ esp_err_t LoRaDriver::set_spreading_factor(uint8_t sf) {
 
     uint8_t modcfg1 = 0x00;
     switch (sf) {
-        case 5:  modcfg1 = 0x50; break;
-        case 6:  modcfg1 = 0x60; break;
-        case 7:  modcfg1 = 0x70; break;
-        case 8:  modcfg1 = 0x80; break;
-        case 9:  modcfg1 = 0x90; break;
-        case 10: modcfg1 = 0xA0; break;
-        case 11: modcfg1 = 0xB0; break;
-        case 12: modcfg1 = 0xC0; break;
+        case 5:  modcfg1 = SX1262_SF_5; break;
+        case 6:  modcfg1 = SX1262_SF_6; break;
+        case 7:  modcfg1 = SX1262_SF_7; break;
+        case 8:  modcfg1 = SX1262_SF_8; break;
+        case 9:  modcfg1 = SX1262_SF_9; break;
+        case 10: modcfg1 = SX1262_SF_10; break;
+        case 11: modcfg1 = SX1262_SF_11; break;
+        case 12: modcfg1 = SX1262_SF_12; break;
     }
 
     uint8_t reg = read_reg(SX1262_REG_LORA_MODEM_CONFIG1);
@@ -320,6 +330,11 @@ esp_err_t LoRaDriver::send_blocking(const uint8_t* data, size_t len, uint32_t ti
 }
 
 esp_err_t LoRaDriver::receive(uint8_t* data, size_t max_len, size_t* actual_len, uint32_t timeout_ms) {
+    if (mode_ == LoRaMode::CAD) {
+        ESP_LOGW(TAG, "Cannot start RX while in CAD mode");
+        return ESP_ERR_INVALID_STATE;
+    }
+
     ESP_ERROR_CHECK(standby());
 
     uint8_t pkt_type = SX1262_PKT_TYPE_LORA;
