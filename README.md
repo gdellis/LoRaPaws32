@@ -1,7 +1,7 @@
 # Pet Tracker for ESP32
 
 [![C++](https://img.shields.io/badge/C++-00599C?logo=cpp)](https://isocpp.org/)
-[![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v5.3-green?logo=espressif)](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c6/)
+[![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v6.0-green?logo=espressif)](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c6/)
 [![License: Personal Use Only](https://img.shields.io/badge/License-Personal%20Use%20Only-orange.svg)](LICENSE)
 [![CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](LICENSE-DESIGNS)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
