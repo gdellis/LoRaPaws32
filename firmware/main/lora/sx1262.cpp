@@ -86,7 +86,7 @@ LoRaDriver::LoRaDriver(spi_host_device_t spi_host, gpio_num_t mosi, gpio_num_t m
     , spi_(nullptr)
     , mosi_(mosi), miso_(miso), sclk_(sclk), nss_(nss)
     , reset_(reset), busy_(busy), dio1_(dio1)
-    , event_group_(xEventGroupCreateStatic(&event_group_buffer_))
+    , event_group_(xEventGroupCreate())
     , mode_(LoRaMode::SLEEP)
     , frequency_(LORA_DEFAULT_FREQ)
     , tx_power_(LORA_DEFAULT_TX_POWER)

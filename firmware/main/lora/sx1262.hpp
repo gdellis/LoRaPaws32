@@ -237,7 +237,6 @@ private:
     gpio_num_t mosi_, miso_, sclk_, nss_, reset_, busy_, dio1_;
 
     EventGroupHandle_t event_group_;
-    StaticEventGroup_t event_group_buffer_;
 
     LoRaMode mode_;
     uint32_t frequency_;
