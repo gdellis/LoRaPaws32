@@ -597,7 +597,7 @@ hardware/enclosure/
 | 9 | Integration testing | Pending |
 | 10 | Base station (Pi + Python) | Pending |
 | 11 | Flask Web UI | Pending |
-| 12 | PCB design | Pending |
+| 12 | PCB design | In Progress |
 | 13 | Enclosure design | Pending |
 
 ---
