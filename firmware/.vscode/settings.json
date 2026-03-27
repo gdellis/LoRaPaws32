@@ -1,0 +1,9 @@
+{
+  "idf.buildPath": "${workspaceFolder}/build",
+  "idf.buildPathWin": "${workspaceFolder}\\build",
+	"idf.sdkconfigFilePath": "${workspaceFolder}/sdkconfig",
+	"idf.svdFilePath": "${workspaceFolder}/esp32.svd",
+  "idf.telemetry": false,
+  "idf.unitTestFilePattern": "${workspaceFolder}/test/test_*.c",
+  "idf.currentSetup": "/home/glenn/.espressif/v6.0/esp-idf",
+}

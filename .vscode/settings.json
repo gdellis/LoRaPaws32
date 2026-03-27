@@ -8,14 +8,7 @@
     "-DPYTHON_DEPS_CHECKED=1",
     "-DESP_PLATFORM=1"
   ],
-  "idf.openOcdConfigs": [
-    "${workspaceFolder}/firmwareboard/esp32c3-builtin.cfg"
-  ],
-  "idf.buildPath": "${workspaceFolder}/firmware/build",
-  "idf.buildPathWin": "${workspaceFolder}\\firmware\\build",
-	"idf.sdkconfigFilePath": "${workspaceFolder}/firmware/sdkconfig",
-	"idf.svdFilePath": "${workspaceFolder}/firmware/esp32.svd",
-  "idf.telemetry": false,
-  "idf.unitTestFilePattern": "${workspaceFolder}/firmware/test/test_*.c",
-  "cmake.sourceDirectory": "/home/glenn/projects/esp32-tracker/firmware"
+  "idf.currentSetup": "/home/glenn/.espressif/v6.0/esp-idf",
+  "cmake.sourceDirectory": "/home/glenn/projects/esp32-tracker/firmware",
+
 }

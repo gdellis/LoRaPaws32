@@ -4,17 +4,13 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "espressif.esp-idf-extension",
                 "ms-vscode.cpptools-extension-pack",
                 "1Password.op-vscode",
                 "eamodio.gitlens"
             ],
             "settings": {
-                "idf.adapterTarget.name": "esp32c6",
-                "idf.espIdfPath": "/opt/esp/idf",
-                "idf.pythonBinPath": "/opt/esp/python_env/idf5.3_py3.10_env/bin/python",
                 "idf.telemetry": false,
-                "cSpell.extraPaths": "${workspaceFolder}/firmware/build/config",
+                "cSpell.extraPaths": "build/config",
                 "C_Cpp.default.configurationProvider": "ms-vscode.cpptools",
                 "telemetry.telemetryLevel": "off",
                 "telemetry.enableTelemetry": false
