@@ -8,8 +8,11 @@
 
 static const char* TAG = "tracker";
 
-TrackerStateMachine::TrackerStateMachine()
-    : ctx_({TrackerState::INIT, WakeSource::NONE, 0, false, false, 0}) {}
+TrackerStateMachine::TrackerStateMachine(Gps& gps, LoRaDriver& lora, Accelerometer& accel)
+    : ctx_({TrackerState::INIT, WakeSource::NONE, 0, false, false, 0}),
+      gps_(gps),
+      lora_(lora),
+      accel_(accel) {}
 
 void TrackerStateMachine::init() {
     transition_to(TrackerState::IDLE);
