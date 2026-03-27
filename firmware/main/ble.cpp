@@ -190,9 +190,7 @@ void BleServer::add_characteristics() {
                                             ESP_GATT_PERM_READ,
                                             ESP_GATT_CHAR_PROP_BIT_READ,
                                             &attr_val, &attr_ctrl);
-    if (ret == ESP_OK) {
-        location_char_handle_ = service_handle_;
-    }
+    (void)ret;
     
     esp_bt_uuid_t name_uuid = {
         .len = ESP_UUID_LEN_16,
@@ -203,9 +201,7 @@ void BleServer::add_characteristics() {
                                   ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
                                   ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_WRITE,
                                   &attr_val, &attr_ctrl);
-    if (ret == ESP_OK) {
-        name_char_handle_ = service_handle_;
-    }
+    (void)ret;
 }
 
 void BleServer::start_advertising() {
