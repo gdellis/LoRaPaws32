@@ -1,7 +1,11 @@
 #include "geofence.hpp"
 #include <math.h>
 
-#define EARTH_RADIUS_M 6371000
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#define EARTH_RADIUS_METERS 6371000
 
 static double to_radians(int32_t degrees_e6) {
     return (degrees_e6 / 1000000.0) * (M_PI / 180.0);
@@ -19,7 +23,7 @@ int64_t haversine_distance(int32_t lat1, int32_t lon1, int32_t lat2, int32_t lon
     
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     
-    return (int64_t)(EARTH_RADIUS_M * c);
+    return (int64_t)(EARTH_RADIUS_METERS * c);
 }
 
 bool point_in_circle(const GeoPoint& point, const CircleZone& zone) {
