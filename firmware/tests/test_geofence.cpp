@@ -27,6 +27,58 @@ TEST_CASE("Haversine distance calculation", "[geofence]") {
         REQUIRE(dist > 110000);
         REQUIRE(dist < 112000);
     }
+
+    SECTION("Antimeridian crossing - Tokyo to San Francisco") {
+        int32_t tokyo_lat = 35652000;
+        int32_t tokyo_lon = 139745000;
+        int32_t sf_lat = 37774700;
+        int32_t sf_lon = -122420000;
+        int64_t dist = haversine_distance(tokyo_lat, tokyo_lon, sf_lat, sf_lon);
+        REQUIRE(dist > 8200000);
+        REQUIRE(dist < 8400000);
+    }
+
+    SECTION("North pole to equator") {
+        int32_t pole_lat = 90000000;
+        int32_t eq_lat = 0;
+        int32_t lon = 0;
+        int64_t dist = haversine_distance(pole_lat, lon, eq_lat, lon);
+        REQUIRE(dist > 10000000);
+        REQUIRE(dist < 10050000);
+    }
+}
+
+TEST_CASE("Coordinate validation", "[geofence]") {
+    SECTION("Valid coordinates pass") {
+        REQUIRE(coordinates_valid(40000000, -74000000) == true);
+        REQUIRE(coordinates_valid(0, 0) == true);
+        REQUIRE(coordinates_valid(-60000000, 180000000) == true);
+    }
+
+    SECTION("Invalid latitude fails") {
+        REQUIRE(coordinates_valid(95000000, 0) == false);
+        REQUIRE(coordinates_valid(-95000000, 0) == false);
+    }
+
+    SECTION("Invalid longitude fails") {
+        REQUIRE(coordinates_valid(0, 185000000) == false);
+        REQUIRE(coordinates_valid(0, -185000000) == false);
+    }
+}
+
+TEST_CASE("Zone name safety", "[geofence]") {
+    SECTION("Short name fits") {
+        CircleZone zone = {{0}};
+        zone_set_name(zone, "Home");
+        REQUIRE(strcmp(zone.name, "Home") == 0);
+    }
+
+    SECTION("Long name truncated safely") {
+        CircleZone zone = {{0}};
+        zone_set_name(zone, "This is a very long zone name that exceeds limit");
+        REQUIRE(strlen(zone.name) < 32);
+        REQUIRE(zone.name[30] == '\0');
+    }
 }
 
 TEST_CASE("Point in circle detection", "[geofence]") {
@@ -51,10 +103,20 @@ TEST_CASE("Point in circle detection", "[geofence]") {
         REQUIRE(point_in_circle(point, zone) == false);
     }
 
-    SECTION("Point on boundary is inside") {
-        GeoPoint point = zone.center;
-        int64_t dist = haversine_distance(point.latitude, point.longitude, 
-                                          zone.center.latitude, zone.center.longitude);
-        REQUIRE(dist <= zone.radius_m);
+    SECTION("Invalid point coordinates returns false") {
+        GeoPoint bad_point = {95000000, 0};
+        REQUIRE(point_in_circle(bad_point, zone) == false);
+    }
+
+    SECTION("Very small radius zone") {
+        CircleZone tiny_zone = {
+            .name = "TinyZone",
+            .center = {40000000, -74000000},
+            .radius_m = 1
+        };
+        GeoPoint near_point = {40000001, -74000000};
+        GeoPoint far_point = {40000010, -74000000};
+        REQUIRE(point_in_circle(near_point, tiny_zone) == false);
+        REQUIRE(point_in_circle(far_point, tiny_zone) == false);
     }
 }
