@@ -37,6 +37,12 @@
 #define BOARD_LORA_BUSY_PIN GPIO_NUM_2
 /** @brief LoRa DIO1 interrupt GPIO */
 #define BOARD_LORA_DIO1_PIN GPIO_NUM_3
+/** @brief LIS3DH interrupt GPIO */
+#define BOARD_ACCEL_INT_PIN GPIO_NUM_0
+/** @brief LIS3DH I2C SDA GPIO */
+#define BOARD_ACCEL_SDA_PIN GPIO_NUM_1
+/** @brief LIS3DH I2C SCL GPIO */
+#define BOARD_ACCEL_SCL_PIN GPIO_NUM_2
 
 #elif defined(CONFIG_IDF_TARGET_ESP32C6)
 #include <driver/gpio.h>
@@ -63,6 +69,12 @@
 #define BOARD_LORA_BUSY_PIN GPIO_NUM_3
 /** @brief LoRa DIO1 interrupt GPIO */
 #define BOARD_LORA_DIO1_PIN GPIO_NUM_1
+/** @brief LIS3DH interrupt GPIO */
+#define BOARD_ACCEL_INT_PIN GPIO_NUM_12
+/** @brief LIS3DH I2C SDA GPIO */
+#define BOARD_ACCEL_SDA_PIN GPIO_NUM_1
+/** @brief LIS3DH I2C SCL GPIO */
+#define BOARD_ACCEL_SCL_PIN GPIO_NUM_2
 
 #else
 #error "No target board specified. Set CONFIG_IDF_TARGET_ESP32S3 or CONFIG_IDF_TARGET_ESP32C6"
