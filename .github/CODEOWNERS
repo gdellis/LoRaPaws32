@@ -1,0 +1,9 @@
+# CODEOWNERS - Auto-assign reviewers for PRs
+
+# Default owner for all code changes
+*       @gdellis
+
+# You can add specific paths if needed:
+# firmware/ @gdellis
+# docs/    @gdellis
+# .github/ @gdellis

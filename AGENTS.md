@@ -19,6 +19,7 @@ See the `.agents/` folder for detailed guidelines:
 - [.agents/rules/git.md](.agents/rules/git.md) - Git workflow
 - [.agents/rules/github.md](.agents/rules/github.md) - GitHub workflow
 - [.agents/rules/markdown.md](.agents/rules/markdown.md) - Markdown guidelines
+- [.agents/rules/workflow.md](.agents/rules/workflow.md) - Agent workflow rules
 
 ### Project Guides
 
