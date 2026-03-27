@@ -2,8 +2,9 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
-constexpr int32_t LATLON_MULTIPLIER = 1000000;
+constexpr int32_t COORD_SCALE = 1000000;
 
 struct GeoPoint {
     int32_t latitude;   // degrees * 1e6
@@ -11,10 +12,25 @@ struct GeoPoint {
 };
 
 struct CircleZone {
-    char name[32];
+    char name[31];  // Max 31 chars + null terminator for safety
     GeoPoint center;
     uint32_t radius_m;   // meters
 };
+
+/**
+ * @brief Validate geographic coordinates
+ * @param lat Latitude in degrees * 1e6
+ * @param lon Longitude in degrees * 1e6
+ * @return true if coordinates are valid, false otherwise
+ */
+bool coordinates_valid(int32_t lat, int32_t lon);
+
+/**
+ * @brief Safely copy zone name with length validation
+ * @param zone Target zone
+ * @param name Source name string (max 31 chars)
+ */
+void zone_set_name(CircleZone& zone, const char* name);
 
 /**
  * @brief Check if a point is within a circular geofence zone

@@ -8,7 +8,21 @@
 #define EARTH_RADIUS_METERS 6371000
 
 static double to_radians(int32_t degrees_e6) {
-    return (degrees_e6 / 1000000.0) * (M_PI / 180.0);
+    return (static_cast<double>(degrees_e6) / 1000000.0) * (M_PI / 180.0);
+}
+
+bool coordinates_valid(int32_t lat, int32_t lon) {
+    constexpr int32_t MAX_LAT = 90 * 1000000;
+    constexpr int32_t MIN_LAT = -90 * 1000000;
+    constexpr int32_t MAX_LON = 180 * 1000000;
+    constexpr int32_t MIN_LON = -180 * 1000000;
+    
+    return (lat >= MIN_LAT && lat <= MAX_LAT) && (lon >= MIN_LON && lon <= MAX_LON);
+}
+
+void zone_set_name(CircleZone& zone, const char* name) {
+    strncpy(zone.name, name, sizeof(zone.name) - 1);
+    zone.name[sizeof(zone.name) - 1] = '\0';
 }
 
 int64_t haversine_distance(int32_t lat1, int32_t lon1, int32_t lat2, int32_t lon2) {
@@ -27,6 +41,13 @@ int64_t haversine_distance(int32_t lat1, int32_t lon1, int32_t lat2, int32_t lon
 }
 
 bool point_in_circle(const GeoPoint& point, const CircleZone& zone) {
+    if (!coordinates_valid(point.latitude, point.longitude)) {
+        return false;
+    }
+    if (!coordinates_valid(zone.center.latitude, zone.center.longitude)) {
+        return false;
+    }
+    
     int64_t distance = haversine_distance(
         point.latitude, point.longitude,
         zone.center.latitude, zone.center.longitude
