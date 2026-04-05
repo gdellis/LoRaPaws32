@@ -95,7 +95,8 @@ These warnings are expected and do not affect the build. They occur because:
 - Host-based tests use standard GCC
 - clangd uses host GCC which doesn't recognize these flags
 
-The warnings are cosmetic and can be safely ignored. Actual compilation uses the correct toolchain via `idf.py build` or `./build.sh`.
+The warnings are cosmetic and can be safely ignored. Actual compilation uses the correct
+toolchain via `idf.py build` or `./build.sh`.
 
 ### Flash
 

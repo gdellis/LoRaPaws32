@@ -36,7 +36,18 @@ idf.py test
 |--------------|-------------------|
 | `esp_timer_get_time()` | `tests/include/esp_timer.h`, `tests/src/esp_timer_mock.cpp` |
 | `gpio_get_level()` | `tests/include/driver/gpio.h`, `tests/src/gpio_mock.cpp` |
+| `gpio_install_isr_service()` | `tests/include/driver/gpio.h`, `tests/src/gpio_mock.cpp` |
 | `ESP_ERROR_CHECK()` | `tests/include/esp_err.h` |
 | `ESP_LOG*` macros | `tests/include/esp_log.h` |
+| `vEventGroupDelete()` | `tests/include/freertos/event_groups.h`, `tests/src/event_groups_mock.cpp` |
+| `xEventGroupWaitBits()` | `tests/include/freertos/event_groups.h`, `tests/src/event_groups_mock.cpp` |
 
-**Key principle**: Keep mocks minimal - only mock what the code actually calls. Prefer thin wrappers around source files rather than comprehensive mocks.
+**Key principle**: Keep mocks minimal - only mock what the code actually calls. Prefer thin
+wrappers around source files rather than comprehensive mocks.
+
+**When adding new mocks:**
+
+1. Check if mock already exists in `tests/include/` or `tests/src/`
+2. Add declaration to mock header in `tests/include/`
+3. Implement mock function in `tests/src/`
+4. Update this table for future reference
