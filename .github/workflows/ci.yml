@@ -63,7 +63,8 @@ jobs:
 
       - name: Run pre-commit (markdown + shell only)
         run: |
-          pre-commit run markdownlint-cli2 shellcheck
+          pre-commit run markdownlint-cli2
+          pre-commit run shellcheck
 
   # Lint C++ with clang-format dry-run
   lint-cpp:
