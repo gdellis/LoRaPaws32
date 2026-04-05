@@ -86,9 +86,9 @@ jobs:
         run: |
           find . -type f -name '*.sh' -not -path './.git/*' -print0 | xargs -0 shellcheck
 
-  # Lint Markdown
-  lint-markdown:
-    name: Lint Markdown
+  # Lint Markdown and other files via pre-commit
+  lint-precommit:
+    name: Lint (pre-commit)
     runs-on: ubuntu-latest
     continue-on-error: true
 
@@ -96,21 +96,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache npm
+      - name: Cache pre-commit
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-markdownlint-${{ hashFiles('.github/workflows/ci.yml') }}
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            pre-commit-${{ runner.os }}-
 
-      - name: Install markdownlint-cli2
-        run: |
-          npm install -g markdownlint-cli2
+      - name: Install pre-commit
+        run: pip install pre-commit
 
-      - name: Run markdownlint-cli2
-        run: |
-          markdownlint-cli2 '**/*.md'
+      - name: Run pre-commit
+        run: pre-commit run --all-files
 
   # Build ESP-IDF firmware (runs in Docker)
   build-firmware:
