@@ -2,7 +2,9 @@
 
 ## Overview
 
-This plan outlines the implementation order for the ESP32-C6 pet tracker firmware. The goal is to build incrementally, starting with bare metal hardware access and adding complexity layer by layer.
+This plan outlines the implementation order for the ESP32-C6 pet tracker
+firmware. The goal is to build incrementally, starting with bare metal hardware
+access and adding complexity layer by layer.
 
 ---
 

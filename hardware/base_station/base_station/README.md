@@ -46,7 +46,9 @@ base_station/
 2. Open `base_station.kicad_pro` in KiCad 8+
 
 3. Configure library paths:
-   - **Symbol Libraries**: Add `../../third_party/OPL_Kicad_Library/Seeed Studio XIAO ESP32S3/lib/` and `../../third_party/OPL_Kicad_Library/Seeed Studio Wio SX1262 for XIAO ESP32S3/lib/`
+   - **Symbol Libraries**: Add
+     `../../third_party/OPL_Kicad_Library/Seeed Studio XIAO ESP32S3/lib/` and
+     `../../third_party/OPL_Kicad_Library/Seeed Studio Wio SX1262 for XIAO ESP32S3/lib/`
    - **Footprint Libraries**: Same paths with `.pretty` suffix
 
 4. Add components from libraries to schematic
