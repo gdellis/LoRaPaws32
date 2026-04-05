@@ -29,25 +29,7 @@ See the `.agents/` folder for detailed guidelines:
 
 ## Current Progress
 
-### Completed
-
-- **Phase 1 & 2**: Integration fixes (PR #16 merged)
-  - Added `gps.init()` and `lora.init()` calls
-  - Made LED driver static and passed to state machine
-  - Added `configure_wakeup_sources()` for GPIO wakeup
-  - Fixed `get_wakeup_source()` to distinguish MOTION vs BUTTON
-  - Fixed duplicate `esp_sleep_enable_gpio_wakeup()` calls
-- **Phase 3**: Error handling (PR #17 open)
-  - `TrackerStateMachine::init()` now checks and propagates `Config::init()` and `Config::load()` errors
-  - `Config::load()` returns `ESP_ERR_NOT_FOUND` when NVS is empty (all defaults used)
-
-### In Progress
-
-- **Phase 4**: Integration (ButtonHandler, geofence, BLE notifications, last_wake tracking)
-
-### Remaining
-
-- Phase 5: GPS power control (hardware dependent)
+See [PROGRESS.md](PROGRESS.md) for detailed implementation status.
 
 ## Quick Reference
 
