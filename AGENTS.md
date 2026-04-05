@@ -27,6 +27,10 @@ See the `.agents/` folder for detailed guidelines:
 - [.agents/guides/testing.md](.agents/guides/testing.md) - Unit testing
 - [.agents/guides/documentation.md](.agents/guides/documentation.md) - Documentation standards
 
+## Current Progress
+
+See [PROGRESS.md](PROGRESS.md) for detailed implementation status.
+
 ## Quick Reference
 
 ### Pin Configuration
