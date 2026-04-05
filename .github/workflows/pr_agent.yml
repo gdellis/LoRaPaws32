@@ -38,6 +38,7 @@ jobs:
           use_github_token: true
           prompt: |
             Review this pull request:
+            - Verify github actions in PR passed  
             - Check for code quality issues
             - Look for potential bugs / security issues.
             - Suggest improvements
