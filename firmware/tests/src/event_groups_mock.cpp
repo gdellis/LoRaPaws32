@@ -49,3 +49,7 @@ EventBits_t xEventGroupSetBitsFromISR(EventGroupHandle_t xEventGroup, EventBits_
     current_bits |= bitsToSet;
     return current_bits;
 }
+
+void vEventGroupDelete(EventGroupHandle_t xEventGroup) {
+    (void)xEventGroup;
+}
