@@ -26,7 +26,7 @@ void TrackerStateMachine::run() {
             break;
 
         case TrackerState::IDLE:
-            ctx_.last_activity_time = esp_timer_get_time() / 1000;
+            update_activity_time();
             transition_to(TrackerState::ACQUIRING_GPS);
             break;
 
@@ -65,7 +65,7 @@ void TrackerStateMachine::run() {
                 ESP_LOGI(TAG, "TX: no GPS fix, will send invalid");
             }
 
-            determine_sleep_duration(ctx_.is_moving);
+            check_motion();
             transition_to(TrackerState::DEEP_SLEEP);
             break;
 
@@ -89,6 +89,7 @@ void TrackerStateMachine::run() {
 
             ctx_.wake_count++;
             ctx_.gps_fix_obtained = false;
+            update_activity_time();
             transition_to(TrackerState::IDLE);
             break;
         }
@@ -140,6 +141,20 @@ void TrackerStateMachine::sleep(uint32_t duration_ms) {
     DeepSleep::sleep();
 }
 
-void TrackerStateMachine::determine_sleep_duration(bool is_moving) {
-    ctx_.is_moving = is_moving;
+void TrackerStateMachine::check_motion() {
+    if (accel_.has_motion()) {
+        ctx_.is_moving = true;
+        accel_.clear_interrupt();
+        ESP_LOGD(TAG, "Motion detected");
+    } else {
+        // If no motion detected for a while, consider stationary
+        int64_t now = esp_timer_get_time() / 1000;
+        if (now - ctx_.last_activity_time > 30000) { // 30 seconds
+            ctx_.is_moving = false;
+        }
+    }
+}
+
+void TrackerStateMachine::update_activity_time() {
+    ctx_.last_activity_time = esp_timer_get_time() / 1000;
 }

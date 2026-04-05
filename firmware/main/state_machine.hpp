@@ -49,7 +49,8 @@ private:
     void transition_to(TrackerState new_state);
     WakeSource get_wake_source();
     void sleep(uint32_t duration_ms);
-    void determine_sleep_duration(bool is_moving);
+    void check_motion();
+    void update_activity_time();
     
     TrackerContext ctx_;
     Gps& gps_;

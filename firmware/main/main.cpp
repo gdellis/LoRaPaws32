@@ -24,39 +24,49 @@
 #include "deep_sleep.hpp"
 #include "gps.hpp"
 #include "lora/sx1262.hpp"
+#include "accelerometer.hpp"
+#include "state_machine.hpp"
 
 static const char* TAG = "pet-tracker";
 
 #define SLEEP_TIMEOUT_MS 30000
-#define DEEP_SLEEP_DURATION_US (5 * 60 * 1000000ULL)
-#define GPS_FIX_TIMEOUT_MS 60000
-#define LORA_TX_TIMEOUT_MS 5000
+#define DEEP_SLEEP_DURATION_US (10LL * 1000000)
 
-/** @brief Packet type for location data */
-static constexpr uint8_t PACKET_TYPE_LOCATION = 0x01;
+void app_main(void) {
+    ESP_LOGI(TAG, "Starting pet tracker...");
+    
+    // Initialize hardware components
+    gpio_driver::init();
+    led_driver::init();
+    button_handler::init();
+    
+    // Initialize GPS (UART1: TX=GPIO7, RX=GPIO15 @ 115200 baud)
+    gps::init(UART_NUM_1);
+    
+    // Initialize LoRa (SPI2: MOSI=GPIO4, MISO=GPIO5, SCLK=GPIO6, CS=GPIO10)
+    lora_driver::init();
+    
+    // Initialize accelerometer (I2C0: SDA=GPIO2, SCL=GPIO3, INT=GPIO9)
+    accelerometer::init(I2C_NUM_0, BOARD_ACCEL_INT_PIN);
+    accelerometer::enable_motion_interrupt(2000); // 200mg threshold
+    
+    // Create and initialize state machine
+    static Gps gps;
+    static LoRaDriver lora(spi_host_device_t::SPI2_HOST, 
+                          GPIO_NUM_4, GPIO_NUM_5, GPIO_NUM_6, GPIO_NUM_10,
+                          GPIO_NUM_0, GPIO_NUM_0, GPIO_NUM_9);
+    static Accelerometer accel(I2C_NUM_0, BOARD_ACCEL_INT_PIN);
+    
+    static TrackerStateMachine state_machine(gps, lora, accel);
+    state_machine.init();
+    
+    ESP_LOGI(TAG, "Pet tracker initialized, entering main loop");
 
-/**
- * @brief Tracker packet structure for LoRa transmission
- */
-struct TrackerPacket {
-    uint8_t type;      /**< Packet type */
-    uint32_t device_id; /**< Device identifier */
-    double latitude;   /**< Latitude in degrees */
-    double longitude;   /**< Longitude in degrees */
-    double altitude;   /**< Altitude in meters */
-    uint16_t battery_mv; /**< Battery voltage in mV */
-    uint8_t satellites; /**< Number of GPS satellites */
-    uint64_t timestamp; /**< Timestamp in milliseconds */
-} __attribute__((packed));
-
-static uint32_t s_device_id = 0x12345678;
-
-/**
- * @brief LoRa event callback handler
- * @param event LoRa event that occurred
- */
-static void lora_event_handler(LoRaEvent event) {
-    ESP_LOGD(TAG, "LoRa event: %s", LoRaDriver::event_to_string(event));
+    while (true) {
+        state_machine.run();
+        // The run() method contains the main loop, so this should never return
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }
 
 /**
