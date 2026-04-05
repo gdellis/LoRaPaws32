@@ -30,6 +30,7 @@ See the `.agents/` folder for detailed guidelines:
 ## Current Progress
 
 ### Completed
+
 - **Phase 1 & 2**: Integration fixes (PR #16 merged)
   - Added `gps.init()` and `lora.init()` calls
   - Made LED driver static and passed to state machine
@@ -41,9 +42,11 @@ See the `.agents/` folder for detailed guidelines:
   - `Config::load()` returns `ESP_ERR_NOT_FOUND` when NVS is empty (all defaults used)
 
 ### In Progress
+
 - **Phase 4**: Integration (ButtonHandler, geofence, BLE notifications, last_wake tracking)
 
 ### Remaining
+
 - Phase 5: GPS power control (hardware dependent)
 
 ## Quick Reference
