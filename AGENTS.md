@@ -46,3 +46,26 @@ See `firmware/main/board_config.h` for ESP32S3/ESP32C6 pin mappings.
 - **sdkconfig target mismatch**: `rm -rf build sdkconfig` and rebuild
 - **FreeRTOS API signatures**: Verify in ESP-IDF v6.0 headers
 - **Port access**: Add user to `docker` group or use `sudo`
+
+## IDE Setup
+
+### LSP Warnings (Expected)
+
+When using clangd or other GCC-based language servers, you may see warnings about Xtensa-specific
+compiler flags (`-mlongcalls`, `-fno-shrink-wrap`, `-fstrict-volatile-bitfields`).
+
+**These are cosmetic and safe to ignore:**
+
+- ESP-IDF compiles with `xtensa-esp-elf-gcc` which accepts these flags
+- Host-based LSP servers use standard GCC which doesn't recognize them
+- Actual builds via `idf.py build` or `./build.sh` work correctly
+
+See [.agents/guides/ide-setup.md](.agents/guides/ide-setup.md) for detailed configuration.
+
+### Code Formatting
+
+- **C++**: `.clang-format` configured for GNU style (ESP-IDF conventions)
+- **Markdown**: 120 character line length
+- **Pre-commit**: Auto-formats C++ and lints Markdown before commit
+
+See [.agents/guides/build.md](.agents/guides/build.md) for formatting details.

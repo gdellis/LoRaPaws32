@@ -114,9 +114,11 @@ TEST_CASE("Point in circle detection", "[geofence]") {
             .center = {40000000, -74000000},
             .radius_m = 1
         };
+        GeoPoint center_point = {40000000, -74000000};
         GeoPoint near_point = {40000001, -74000000};
-        GeoPoint far_point = {40000010, -74000000};
-        REQUIRE(point_in_circle(near_point, tiny_zone) == false);
+        GeoPoint far_point = {40000100, -74000000};
+        REQUIRE(point_in_circle(center_point, tiny_zone) == true);
+        REQUIRE(point_in_circle(near_point, tiny_zone) == true);
         REQUIRE(point_in_circle(far_point, tiny_zone) == false);
     }
 }

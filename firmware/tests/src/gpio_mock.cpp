@@ -76,4 +76,12 @@ int gpio_isr_handler_add(gpio_num_t gpio_num, gpio_isr_t isr_handler, void* args
     return 0;
 }
 
+int gpio_install_isr_service(int intr_alloc_flags) {
+    (void)intr_alloc_flags;
+    return 0;
+}
+
+void gpio_uninstall_isr_service() {
+}
+
 }

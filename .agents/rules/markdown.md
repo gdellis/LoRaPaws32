@@ -15,10 +15,15 @@
     npm install -g markdownlint-cli2
     ```
 
-- **Validation**: Run on all Markdown files:
+- **Validation**: Run on all project Markdown files:
 
     ```bash
-    markdownlint-cli2 "**/*.md"
+    markdownlint-cli2 "**/*.md" \
+      "!firmware/tests/build/**" \
+      "!firmware/build/**" \
+      "!third_party/**" \
+      "!docs/plans/**" \
+      "!.opencode/**"
     ```
 
 - **Auto-fix**: Automatically fix issues where possible:
@@ -47,8 +52,8 @@
   - Always specify the language for fenced code blocks (e.g., \`\`\`bash) (MD040).
   - Use 3 backticks for fencing code blocks.
 - **Line Length** (MD013):
-  - Aim for 80-120 characters per line for readability.
-  - Long lines are acceptable for links or code blocks where wrapping is difficult.
+  - Maximum 120 characters per line
+  - Relaxed for code blocks and URLs
 - **Emphasis**:
   - Use asterisks `*` for italics and double asterisks `**` for bold.
 

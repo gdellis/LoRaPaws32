@@ -1,0 +1,19 @@
+---
+Language: Cpp
+BasedOnStyle: GNU
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+SpacesInParentheses: false
+SpacesInAngles: false
+SpaceAfterCStyleCast: false
+AlignConsecutiveMacros: true
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+ColumnLimit: 100
+PointerAlignment: Left
+ReferenceAlignment: Left

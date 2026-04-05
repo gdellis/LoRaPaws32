@@ -78,6 +78,26 @@ cd firmware
 ./build.sh
 ```
 
+### IDE Setup
+
+**Note:** The ESP-IDF framework uses the Xtensa toolchain (Xtensa-specific compiler
+flags like `-mlongcalls`, `-fno-shrink-wrap`, `-fstrict-volatile-bitfields`).
+When using clangd or other GCC-based LSP servers, you may see warnings such as:
+
+```
+Unknown argument '-mlongcalls'; did you mean '-mlong-calls'?
+Unknown argument: '-fno-shrink-wrap'
+Unknown argument: '-fstrict-volatile-bitfields'
+```
+
+These warnings are expected and do not affect the build. They occur because:
+- ESP-IDF compiles with `xtensa-esp-elf-gcc` which accepts Xtensa-specific flags
+- Host-based tests use standard GCC
+- clangd uses host GCC which doesn't recognize these flags
+
+The warnings are cosmetic and can be safely ignored. Actual compilation uses the correct
+toolchain via `idf.py build` or `./build.sh`.
+
 ### Flash
 
 ```bash
