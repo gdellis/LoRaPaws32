@@ -114,6 +114,7 @@ jobs:
             '!firmware/build/**' \
             '!third_party/**' \
             '!.opencode/**' \
+            '!docs/datasheets/**' \
             '!docs/plans/**'
 
   # Build ESP-IDF firmware (runs in Docker)

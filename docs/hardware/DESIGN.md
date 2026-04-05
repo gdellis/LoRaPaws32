@@ -95,7 +95,9 @@ LiPo (3.7V) → MCP1700 (3.3V) → ESP32-C6 + SX1262
 
 ### Firmware Overview
 
-The tracker firmware is event-driven, built on ESP-IDF's FreeRTOS. Most time is spent in deep sleep; on wake, the system acquires GPS, transmits via LoRa, then returns to sleep.
+The tracker firmware is event-driven, built on ESP-IDF's FreeRTOS. Most time is
+spent in deep sleep; on wake, the system acquires GPS, transmits via LoRa, then
+returns to sleep.
 
 ```mermaid
 %%{init: {'theme':'dark'}}%%
@@ -474,7 +476,9 @@ With SF7 + BW125k, ~23 bytes transmits in ~50–100 ms. At +17 dBm, TX current ~
 - Use haversine formula for accurate distance on sphere
 - **On breach**: Set flag in next transmission, trigger alert from cloud
 
-**Compute constraint**: ESP32-C6 is RISC-V but no FPU. Use integer math or lookup tables for haversine. Consider offloading geofence check to base station or cloud if compute is tight.
+**Compute constraint**: ESP32-C6 is RISC-V but no FPU. Use integer math or
+lookup tables for haversine. Consider offloading geofence check to base
+station or cloud if compute is tight.
 
 ---
 
@@ -522,7 +526,8 @@ flowchart LR
 | `pettracker/{device_id}/command` | Phone → Base → Tracker | `{cmd: "ping" \| "config" \| "alarm"}` |
 | `pettracker/{device_id}/config` | Phone → Base → Tracker | `{sleep_interval, geofences}` |
 
-The base station acts as an MQTT bridge: it receives LoRa packets and republishes to HiveMQ, and forwards commands from the phone app to the tracker via LoRa.
+The base station acts as an MQTT bridge: it receives LoRa packets and republishes
+to HiveMQ, and forwards commands from the phone app to the tracker via LoRa.
 
 ---
 
@@ -541,8 +546,9 @@ At one cycle per minute: 0.279 mAh × 60 min × 24 hours = **~401 mAh/day**
 
 With a 500 mAh battery: **~1.25 days** at 1-minute intervals.
 
-**Motion-triggered wake significantly improves battery life**: If pet is stationary 75% of the time and LIS3DH wakes device only on motion, average daily consumption drops to ~100 mAh/day,
-giving **~5 days** battery life.
+**Motion-triggered wake significantly improves battery life**: If pet is stationary
+75% of the time and LIS3DH wakes device only on motion, average daily consumption
+drops to ~100 mAh/day, giving **~5 days** battery life.
 
 **To extend battery life**:
 
