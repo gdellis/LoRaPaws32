@@ -6,7 +6,7 @@ Rules for AI agents (like OpenCode) working on this repository alongside a human
 
 ## Core Principles
 
-1. **Never merge** - Always wait for human approval before merging PRs
+1. **Never merge** - Only merge PRs when the user explicitly asks you to. Never merge on your own.
 2. **Ask for clarification** - When requirements are ambiguous, ask before guessing
 3. **Make focused changes** - One logical change per PR
 4. **Test before reporting** - Verify CI passes before reporting success
@@ -22,6 +22,7 @@ Rules for AI agents (like OpenCode) working on this repository alongside a human
 - [ ] Commit message is clear and follows conventions
 - [ ] CHANGELOG.md updated with entry under `[Unreleased]`
 - [ ] PROGRESS.md updated if phase status changed
+- [ ] Review suggestions deferred to future work documented in PR body
 
 ### Branch Naming
 
@@ -68,7 +69,7 @@ When reporting PR status, use:
 
 ## What Agents Should NEVER Do
 
-- ❌ Merge PRs
+- ❌ Merge PRs (unless user explicitly asks you to)
 - ❌ Force push to main or protected branches
 - ❌ Delete branches (unless explicitly asked)
 - ❌ Access secrets or credentials
@@ -79,7 +80,7 @@ When reporting PR status, use:
 ## What Agents Should ALWAYS Do
 
 - ✅ Create PRs for all changes
-- ✅ Wait for human approval before merge
+- ✅ Wait for explicit user approval before merging any PR
 - ✅ Report CI failures with error details
 - ✅ Update CHANGELOG.md when changes are made (add entry under `[Unreleased]`)
 - ✅ Update PROGRESS.md when phases are completed or status changes
