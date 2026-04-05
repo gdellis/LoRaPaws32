@@ -16,7 +16,7 @@
 #include <driver/gpio.h>
 
 /** @brief Status LED GPIO */
-#define BOARD_LED_PIN GPIO_NUM_8
+#define BOARD_LED_PIN GPIO_NUM_40
 /** @brief Push button GPIO */
 #define BOARD_BUTTON_PIN GPIO_NUM_9
 /** @brief GPS UART TX GPIO */
@@ -40,9 +40,9 @@
 /** @brief LIS3DH interrupt GPIO */
 #define BOARD_ACCEL_INT_PIN GPIO_NUM_0
 /** @brief LIS3DH I2C SDA GPIO */
-#define BOARD_ACCEL_SDA_PIN GPIO_NUM_1
+#define BOARD_ACCEL_SDA_PIN GPIO_NUM_11
 /** @brief LIS3DH I2C SCL GPIO */
-#define BOARD_ACCEL_SCL_PIN GPIO_NUM_2
+#define BOARD_ACCEL_SCL_PIN GPIO_NUM_12
 
 #elif defined(CONFIG_IDF_TARGET_ESP32C6)
 #include <driver/gpio.h>
@@ -62,9 +62,9 @@
 /** @brief LoRa SCK GPIO */
 #define BOARD_LORA_SCK_PIN GPIO_NUM_8
 /** @brief LoRa NSS (chip select) GPIO */
-#define BOARD_LORA_NSS_PIN GPIO_NUM_9
+#define BOARD_LORA_NSS_PIN GPIO_NUM_10
 /** @brief LoRa reset GPIO */
-#define BOARD_LORA_RESET_PIN GPIO_NUM_10
+#define BOARD_LORA_RESET_PIN GPIO_NUM_11
 /** @brief LoRa busy indicator GPIO */
 #define BOARD_LORA_BUSY_PIN GPIO_NUM_3
 /** @brief LoRa DIO1 interrupt GPIO */
@@ -72,9 +72,9 @@
 /** @brief LIS3DH interrupt GPIO */
 #define BOARD_ACCEL_INT_PIN GPIO_NUM_12
 /** @brief LIS3DH I2C SDA GPIO */
-#define BOARD_ACCEL_SDA_PIN GPIO_NUM_1
+#define BOARD_ACCEL_SDA_PIN GPIO_NUM_13
 /** @brief LIS3DH I2C SCL GPIO */
-#define BOARD_ACCEL_SCL_PIN GPIO_NUM_2
+#define BOARD_ACCEL_SCL_PIN GPIO_NUM_14
 
 #else
 #error "No target board specified. Set CONFIG_IDF_TARGET_ESP32S3 or CONFIG_IDF_TARGET_ESP32C6"

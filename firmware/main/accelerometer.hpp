@@ -47,7 +47,8 @@
 class Accelerometer {
 public:
     Accelerometer(i2c_port_t i2c_port, gpio_num_t int_pin);
-    
+
+    static esp_err_t init(i2c_port_t i2c_port, gpio_num_t int_pin);
     esp_err_t init();
     esp_err_t enable_motion_interrupt(uint16_t threshold_mg);
     esp_err_t clear_interrupt();
@@ -58,7 +59,7 @@ private:
     esp_err_t write_reg(uint8_t reg, uint8_t value);
     esp_err_t read_reg(uint8_t reg, uint8_t& value);
     esp_err_t read_reg16(uint8_t reg, int16_t& value);
-    
+
     i2c_port_t i2c_port_;
     gpio_num_t int_pin_;
 };

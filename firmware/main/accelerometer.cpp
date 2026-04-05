@@ -4,8 +4,32 @@
 
 static const char* TAG = "lis3dh";
 
+static i2c_port_t s_i2c_port = I2C_NUM_0;
+static gpio_num_t s_int_pin = GPIO_NUM_0;
+
 Accelerometer::Accelerometer(i2c_port_t i2c_port, gpio_num_t int_pin)
     : i2c_port_(i2c_port), int_pin_(int_pin) {}
+
+esp_err_t Accelerometer::init(i2c_port_t i2c_port, gpio_num_t int_pin) {
+    s_i2c_port = i2c_port;
+    s_int_pin = int_pin;
+
+    i2c_config_t conf = {
+        .mode = I2C_MODE_MASTER,
+        .sda_io_num = BOARD_ACCEL_SDA_PIN,
+        .scl_io_num = BOARD_ACCEL_SCL_PIN,
+        .sda_pullup_en = GPIO_PULLUP_ENABLE,
+        .scl_pullup_en = GPIO_PULLUP_ENABLE,
+        .clk_cfg = I2C_CLK_FREQ_100K
+    };
+
+    esp_err_t ret = i2c_param_config(i2c_port, &conf);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+
+    return i2c_driver_install(i2c_port, I2C_MODE_MASTER, 0, 0, 0);
+}
 
 esp_err_t Accelerometer::init() {
     uint8_t whoami = 0;
@@ -81,7 +105,7 @@ esp_err_t Accelerometer::enable_motion_interrupt(uint16_t threshold_mg) {
         return ret;
     }
     
-    uint8_t threshold = (threshold_mg * 128) / 1000;
+    uint8_t threshold = ((uint32_t)threshold_mg * 128) / 1000;
     if (threshold > 127) {
         threshold = 127;
     }

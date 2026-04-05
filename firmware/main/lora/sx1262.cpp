@@ -24,14 +24,13 @@ static constexpr uint8_t SX1262_CMD_GET_PKT_TYPE = 0x11;
 static constexpr uint8_t SX1262_CMD_GET_STATUS = 0x12;
 static constexpr uint8_t SX1262_CMD_GET_RX_BUFFER_STATUS = 0x13;
 static constexpr uint8_t SX1262_CMD_GET_PKT_CONFIG = 0x14;
-static constexpr uint8_t SX1262_CMD_GET_IRQ_STATUS = 0x12;
+static constexpr uint8_t SX1262_CMD_GET_IRQ_STATUS = 0x15;
 static constexpr uint8_t SX1262_CMD_CLR_IRQ_STATUS = 0x02;
 static constexpr uint8_t SX1262_CMD_SET_DIO_IRQ = 0x08;
 static constexpr uint8_t SX1262_CMD_SET_PKT_PARAM = 0x8C;
-static constexpr uint8_t SX1262_CMD_SET_FREQ = 0x86;
+static constexpr uint8_t SX1262_CMD_SET_RF_FREQ = 0x86;
 static constexpr uint8_t SX1262_CMD_SET_TX_PARAMS = 0x8E;
 static constexpr uint8_t SX1262_CMD_SET_MODULATION = 0x90;
-static constexpr uint8_t SX1262_CMD_SET_RF_FREQ = 0x86;
 
 static constexpr uint8_t SX1262_PKT_TYPE_LORA = 0x01;
 static constexpr uint8_t SX1262_PKT_TYPE_FSK = 0x02;
@@ -100,6 +99,9 @@ LoRaDriver::~LoRaDriver() {
         spi_bus_remove_device(spi_);
     }
     spi_bus_free(spi_host_);
+    if (event_group_ != nullptr) {
+        vEventGroupDelete(event_group_);
+    }
 }
 
 esp_err_t LoRaDriver::init() {
@@ -135,8 +137,8 @@ esp_err_t LoRaDriver::init() {
     gpio_set_direction(busy_, GPIO_MODE_INPUT);
     gpio_reset_pin(dio1_);
     gpio_set_direction(dio1_, GPIO_MODE_INPUT);
-
     gpio_set_intr_type(dio1_, GPIO_INTR_POSEDGE);
+    gpio_install_isr_service(0);
     gpio_isr_handler_add(dio1_, dio1_isr_handler, this);
 
     ESP_ERROR_CHECK(reset());
