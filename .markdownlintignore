@@ -1,4 +1,7 @@
 docs/plans/
+docs/datasheets/
+docs/hardware/
+hardware/base_station/
 firmware/tests/build/
 firmware/build/
 third_party/
