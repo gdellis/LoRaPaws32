@@ -106,6 +106,50 @@
 
 ---
 
+## Codebase Analysis (2026-04-12)
+
+### Overall Health: 6/10 - Functional firmware, incomplete system
+
+### Code Quality Assessment
+
+| Aspect | Rating | Notes |
+|--------|--------|-------|
+| Code Organization | 8/10 | Clean separation, follows ESP-IDF patterns |
+| Feature Completeness | 5/10 | Core firmware complete, base station missing |
+| Error Handling | 7/10 | Proper error returns, but some ignored |
+| Testing | 7/10 | Good host test coverage, no target tests |
+| Documentation | 7/10 | Good README/PROGRESS, no API docs |
+| Build System | 8/10 | Clean Docker setup, good CI |
+| Code Quality | 6/10 | Some dead code, potential bugs in BLE |
+
+### Critical Bugs Identified
+
+| Issue | Location | Impact |
+|-------|----------|--------|
+| BLE characteristic handles never populated | `ble.cpp:373-378` | READ operations fail - handles are 0 |
+| `check_button()` dead code | `state_machine.cpp:235-237` | Never called, misleading |
+| BLE `update_location()` doesn't notify | `ble.cpp:330-340` | Clients don't receive push updates |
+| `(void)ret` ignores errors | `ble.cpp:224` | Silently swallows characteristic creation errors |
+
+### Missing/Incomplete
+
+| Item | Phase | Priority |
+|------|-------|----------|
+| Battery reading | 13 (PCB) | Low (hardware-dependent) |
+| Integration tests | 9 | **High** |
+| Base station (Python/Flask) | 10 | **High** |
+| PCB design | 12 | Medium |
+| Enclosure design | 13 | Low |
+
+### Recommended Next Steps
+
+1. **Fix critical BLE bugs** - Populate characteristic handles, wire up `update_location()` notifications
+2. **Phase 9: Integration testing** - Test full state machine flow with mocks
+3. **Phase 10: Base station** - Start Python/Flask receiver (firmware LoRa TX is complete)
+4. **PCB design** - Begin KiCad layout to enable battery reading
+
+---
+
 ## Key Decisions Made
 
 - **ESP-IDF version**: v6.0
