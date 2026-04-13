@@ -147,10 +147,6 @@ BleServer::send_alert (const BleAlertData& alert) {
 	if (xSemaphoreTake (mutex_, pdMS_TO_TICKS (BLE_MUTEX_TIMEOUT_MS)) != pdTRUE) {
 		return ESP_ERR_TIMEOUT;
 	}
-
-	if (xSemaphoreTake (mutex_, pdMS_TO_TICKS (BLE_MUTEX_TIMEOUT_MS)) != pdTRUE) {
-		return ESP_ERR_TIMEOUT;
-	}
 	current_alert_ = alert;
 	xSemaphoreGive (mutex_);
 
@@ -170,10 +166,6 @@ esp_err_t
 BleServer::set_device_name (const char* name) {
 	if (name == nullptr) {
 		return ESP_ERR_INVALID_ARG;
-	}
-
-	if (xSemaphoreTake (mutex_, pdMS_TO_TICKS (BLE_MUTEX_TIMEOUT_MS)) != pdTRUE) {
-		return ESP_ERR_TIMEOUT;
 	}
 
 	if (xSemaphoreTake (mutex_, pdMS_TO_TICKS (BLE_MUTEX_TIMEOUT_MS)) != pdTRUE) {
