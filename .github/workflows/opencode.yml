@@ -30,4 +30,4 @@ jobs:
         env:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
         with:
-          model: ${{ secrets.REVIEW_AGENT_MODEL || 'ollama-cloud/qwen3-coder:480b' }}
+          model: ${{ secrets.OC_AGENT_MODEL || 'ollama-cloud/qwen3-coder:480b' }}
