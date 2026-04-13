@@ -23,6 +23,8 @@
 #define BOARD_GPS_TX_PIN GPIO_NUM_7
 /** @brief GPS UART RX GPIO */
 #define BOARD_GPS_RX_PIN GPIO_NUM_15
+/** @brief GPS power control GPIO (active-high MOSFET) */
+#define BOARD_GPS_POWER_PIN GPIO_NUM_21
 /** @brief LoRa MOSI GPIO */
 #define BOARD_LORA_MOSI_PIN GPIO_NUM_4
 /** @brief LoRa MISO GPIO */
@@ -43,6 +45,8 @@
 #define BOARD_ACCEL_SDA_PIN GPIO_NUM_11
 /** @brief LIS3DH I2C SCL GPIO */
 #define BOARD_ACCEL_SCL_PIN GPIO_NUM_12
+/** @brief Battery voltage ADC GPIO (100k/100k divider) */
+#define BOARD_BATTERY_ADC_PIN GPIO_NUM_1
 
 #elif defined(CONFIG_IDF_TARGET_ESP32C6)
 #include <driver/gpio.h>
@@ -55,6 +59,8 @@
 #define BOARD_GPS_TX_PIN	 GPIO_NUM_4
 /** @brief GPS UART RX GPIO */
 #define BOARD_GPS_RX_PIN	 GPIO_NUM_5
+/** @brief GPS power control GPIO (active-high MOSFET) */
+#define BOARD_GPS_POWER_PIN	 GPIO_NUM_18
 /** @brief LoRa MOSI GPIO */
 #define BOARD_LORA_MOSI_PIN	 GPIO_NUM_6
 /** @brief LoRa MISO GPIO */
