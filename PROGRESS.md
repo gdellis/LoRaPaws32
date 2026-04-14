@@ -45,8 +45,8 @@
 | 7 | Motion-aware sleep | ✅ Done (PR #11) |
 | 8 | Geofencing | ✅ Done (PR #13, #14) |
 | 9 | Integration testing | ✅ Done (PR #24) |
-| 10 | Base station (Pi + Python) | Pending |
-| 11 | Flask Web UI | Pending |
+| 10 | Base station (Pi + Python/Flask) | ✅ Done (PR #31) |
+| 11 | Flask Web UI | ✅ Done (PR #31) |
 | 12 | PCB design | Pending |
 | 13 | Enclosure design | Pending |
 
@@ -108,40 +108,46 @@
   - Integrated into state machine `try_lora_send()` for transmission
   - GPS power switching via MOSFET
 
+### Base Station (Python/Flask)
+
+- **Status**: ✅ Implemented (PR #31 merged)
+- **Files**: `base_station/`
+- **Components**:
+  - `config.py` - Configuration dataclasses (MQTT, LoRa, server, DB)
+  - `packet_parser.py` - Parse 23-byte tracker packet format
+  - `mqtt_client.py` - MQTT client for HiveMQ integration
+  - `database.py` - SQLite storage for devices and locations
+  - `app.py` - Flask web application with REST API
+  - `templates/index.html` - Dashboard with device list
+  - `static/` - CSS and JS for web UI
+- **API Endpoints**:
+  - `GET /` - Dashboard
+  - `GET /api/devices` - List devices
+  - `GET /api/devices/<id>` - Device details
+  - `POST /api/devices/<id>/name` - Update device name
+
 ---
 
-## Codebase Analysis (2026-04-12)
+## Codebase Analysis (2026-04-14)
 
-### Overall Health: 7/10 - Functional firmware, base station missing
+### Overall Health: 8/10 - Functional firmware, base station complete
 
 ### Code Quality Assessment
 
 | Aspect | Rating | Notes |
 |--------|--------|-------|
 | Code Organization | 8/10 | Clean separation, follows ESP-IDF patterns |
-| Feature Completeness | 7/10 | Core firmware complete, base station pending |
+| Feature Completeness | 8/10 | Core firmware and base station complete |
 | Error Handling | 8/10 | Proper error returns, BLE bugs fixed |
 | Testing | 8/10 | Good host test coverage + integration tests |
-| Documentation | 7/10 | Good README/PROGRESS, DESIGN.md updated |
+| Documentation | 8/10 | Good README/PROGRESS, DESIGN.md updated |
 | Build System | 8/10 | Clean Docker setup, good CI |
 | Code Quality | 8/10 | BLE bugs fixed, no critical issues |
-
-### Critical Bugs Identified
-
-| Issue | Location | Impact | Status |
-|-------|----------|---------|--------|
-| BLE characteristic handles never populated | `ble.cpp:373-378` | READ operations fail | ✅ Fixed PR #23 |
-| `check_button()` dead code | `state_machine.cpp:235-237` | Never called | ✅ Fixed PR #23 |
-| BLE `update_location()` doesn't notify | `ble.cpp:330-340` | Clients don't receive updates | ✅ Fixed PR #23 |
-| `(void)ret` ignores errors | `ble.cpp:224` | Silently swallows errors | ✅ Fixed PR #23 |
 
 ### Missing/Incomplete
 
 | Item | Phase | Priority |
 |------|-------|----------|
-| Battery reading | 13 (PCB) | Low (hardware-dependent) |
-| Integration tests | 9 | **High** |
-| Base station (Python/Flask) | 10 | **High** |
 | PCB design | 12 | Medium |
 | Enclosure design | 13 | Low |
 
@@ -151,8 +157,8 @@
 2. ~~Phase 9: Integration testing~~ - ✅ Done (PR #24 merged)
 3. ~~GPS power switching~~ - ✅ Done (PR #25 merged)
 4. ~~Battery ADC reading~~ - ✅ Done (PR #25 merged)
-5. **Phase 10: Base station** - Start Python/Flask receiver (firmware LoRa TX is complete)
-6. **PCB design** - Begin KiCad layout to enable battery reading
+5. ~~Phase 10: Base station~~ - ✅ Done (PR #31 merged)
+6. **PCB design** - Begin KiCad layout
 
 ---
 
