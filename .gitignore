@@ -47,3 +47,4 @@ hardware/**/*-backups/
 **/build/
 .opencode/session*.md
 .opencode/package-lock.json
+*.db
