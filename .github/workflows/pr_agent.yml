@@ -10,8 +10,11 @@ concurrency:
   group: pr-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-  review:
+  opencode:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -21,21 +24,21 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          persist-credentials: false
       - name: Validate secrets
         run: |
           if [ -z "${{ secrets.OLLAMA_API_KEY }}" ]; then
             echo "Error: OLLAMA_API_KEY secret is not set or empty"
             exit 1
           fi  
-      
-      - uses: anomalyco/opencode/github@latest
+      - name: Run Opencode
+        uses: anomalyco/opencode/github@latest
         env:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ secrets.REVIEW_AGENT_MODEL || 'ollama-cloud/qwen3-coder:480b' }}
-          use_github_token: true
+          # use_github_token: true
           prompt: |
             Review this pull request:
             - Verify github actions in PR passed  

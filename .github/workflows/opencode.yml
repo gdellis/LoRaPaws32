@@ -6,6 +6,9 @@ on:
   pull_request_review_comment:
     types: [created]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   opencode:
     if: |
@@ -22,12 +25,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-        with:
-          persist-credentials: false
+        # with:
+          # persist-credentials: false
 
       - name: Run opencode
         uses: anomalyco/opencode/github@latest
         env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
         with:
           use_github_token: true
