@@ -30,6 +30,17 @@ Accelerometer::init (i2c_port_t i2c_port, gpio_num_t int_pin) {
 		return ret;
 	}
 
+	i2c_device_config_t dev_conf = {
+		.dev_addr_length = I2C_ADDR_BIT_LEN_7,
+		.device_address = LIS3DH_I2C_ADDR,
+		.scl_speed_hz = 100000,
+	};
+
+	ret = i2c_master_bus_add_device (bus_handle, &dev_conf, &i2c_device_handle_);
+	if (ret != ESP_OK) {
+		return ret;
+	}
+
 	return ESP_OK;
 }
 
@@ -199,88 +210,18 @@ Accelerometer::is_wakeup_source () {
 esp_err_t
 Accelerometer::write_reg (uint8_t reg, uint8_t value) {
 	uint8_t data[2] = { reg, value };
-	i2c_cmd_handle_t cmd = i2c_cmd_link_create ();
 
-	esp_err_t ret = i2c_master_start (cmd);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_write_byte (cmd, (LIS3DH_I2C_ADDR << 1) | I2C_MASTER_WRITE, true);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_write (cmd, data, 2, true);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_stop (cmd);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_cmd_begin (i2c_port_, cmd, pdMS_TO_TICKS (100));
-	i2c_cmd_link_delete (cmd);
-
-	return ret;
+	return i2c_master_transmit (i2c_device_handle_, data, 2, -1);
 }
 
 esp_err_t
 Accelerometer::read_reg (uint8_t reg, uint8_t& value) {
-	i2c_cmd_handle_t cmd = i2c_cmd_link_create ();
-
-	esp_err_t ret = i2c_master_start (cmd);
+	esp_err_t ret = i2c_master_transmit (i2c_device_handle_, &reg, 1, -1);
 	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
 		return ret;
 	}
 
-	ret = i2c_master_write_byte (cmd, (LIS3DH_I2C_ADDR << 1) | I2C_MASTER_WRITE, true);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_write_byte (cmd, reg, true);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_start (cmd);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_write_byte (cmd, (LIS3DH_I2C_ADDR << 1) | I2C_MASTER_READ, true);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_read_byte (cmd, &value, I2C_MASTER_LAST_NACK);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_stop (cmd);
-	if (ret != ESP_OK) {
-		i2c_cmd_link_delete (cmd);
-		return ret;
-	}
-
-	ret = i2c_master_cmd_begin (i2c_port_, cmd, pdMS_TO_TICKS (100));
-	i2c_cmd_link_delete (cmd);
-
-	return ret;
+	return i2c_master_receive (i2c_device_handle_, &value, 1, -1);
 }
 
 esp_err_t
