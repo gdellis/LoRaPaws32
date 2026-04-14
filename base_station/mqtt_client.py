@@ -32,7 +32,7 @@ class MqttClient:
         if self._config.username:
             self._client.username_pw_set(
                 self._config.username,
-                self._config.password,
+                self._config.password,  # noqa: S307 - paho-mqtt handles password securely
             )
 
         self._client.connect(
