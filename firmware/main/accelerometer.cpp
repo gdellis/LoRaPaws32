@@ -1,6 +1,6 @@
 #include "accelerometer.hpp"
 #include "board_config.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "esp_log.h"
 #include "esp_sleep.h"
 
@@ -17,20 +17,20 @@ Accelerometer::init (i2c_port_t i2c_port, gpio_num_t int_pin) {
 	s_i2c_port = i2c_port;
 	s_int_pin = int_pin;
 
-	i2c_config_t conf = { .mode = I2C_MODE_MASTER,
-						  .sda_io_num = BOARD_ACCEL_SDA_PIN,
-						  .scl_io_num = BOARD_ACCEL_SCL_PIN,
-						  .sda_pullup_en = GPIO_PULLUP_ENABLE,
-						  .scl_pullup_en = GPIO_PULLUP_ENABLE,
-						  .master = { .clk_speed = 100000 },
-						  .clk_flags = 0 };
+	i2c_master_bus_config_t bus_conf = { .i2c_port = i2c_port,
+										 .sda_io_num = BOARD_ACCEL_SDA_PIN,
+										 .scl_io_num = BOARD_ACCEL_SCL_PIN,
+										 .sda_pullup_en = GPIO_PULLUP_ENABLE,
+										 .scl_pullup_en = GPIO_PULLUP_ENABLE,
+										 .clk_speed = 100000 };
 
-	esp_err_t ret = i2c_param_config (i2c_port, &conf);
+	i2c_master_bus_handle_t bus_handle;
+	esp_err_t ret = i2c_master_driver_install (&bus_handle, &bus_conf);
 	if (ret != ESP_OK) {
 		return ret;
 	}
 
-	return i2c_driver_install (i2c_port, I2C_MODE_MASTER, 0, 0, 0);
+	return ESP_OK;
 }
 
 esp_err_t
