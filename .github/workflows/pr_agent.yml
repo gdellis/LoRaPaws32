@@ -10,6 +10,9 @@ concurrency:
   group: pr-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   opencode:
     runs-on: ubuntu-latest
@@ -21,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          persist-credentials: false
       - name: Validate secrets
         run: |
           if [ -z "${{ secrets.OLLAMA_API_KEY }}" ]; then
