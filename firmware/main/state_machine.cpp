@@ -1,5 +1,4 @@
 #include "state_machine.hpp"
-#include "battery.hpp"
 #include "board_config.h"
 #include "deep_sleep.hpp"
 #include "driver/gpio.h"
@@ -14,7 +13,8 @@ static const char* TAG = "tracker";
 TrackerStateMachine::TrackerStateMachine (Gps& gps, LoRaDriver& lora, Accelerometer& accel,
 										  BleServer& ble, LedDriver& led, BatteryDriver& battery)
 	: ctx_ ({ TrackerState::INIT, WakeSource::NONE, 0, false, false, 0, 0 }), gps_ (gps),
-	  lora_ (lora), accel_ (accel), ble_ (ble), led_ (led), battery_ (battery) {}
+	  lora_ (lora), accel_ (accel), ble_ (ble), led_ (led), battery_ (battery),
+	  geofence_breach_ (false) {}
 
 void
 TrackerStateMachine::init () {

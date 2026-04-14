@@ -2,6 +2,7 @@
 
 #include "esp_adc/adc_oneshot.h"
 #include "esp_err.h"
+#include "esp_log.h"
 #include <stdint.h>
 
 constexpr adc_unit_t BATTERY_ADC_UNIT = ADC_UNIT_1;
@@ -21,16 +22,21 @@ class BatteryDriver {
 
 	uint16_t
 	read_voltage_mv () {
+		if (!initialized_) {
+			return 0;
+		}
+
 		int raw = 0;
 		esp_err_t err = adc_oneshot_read (adc_handle_, BATTERY_ADC_CHANNEL, &raw);
 		if (err != ESP_OK) {
 			return 0;
 		}
 
-		float voltage_ratio
-			= (float)(BATTERY_DIVIDER_R1_OHMS + BATTERY_DIVIDER_R2_OHMS) / BATTERY_DIVIDER_R2_OHMS;
-		float input_voltage = (raw * (float)BATTERY_ADC_VREF_MV / BATTERY_ADC_MAX) * voltage_ratio;
-		return (uint16_t)(input_voltage + 0.5f);
+		// ADC_ATTEN_DB_12 extends range to ~3.1V input, so we need to account
+		// for the voltage divider ratio to get the actual battery voltage.
+		// Formula: voltage_mv = raw * vref / ADC_MAX * (R1 + R2) / R2
+		uint32_t voltage_mv = (uint32_t)raw * BATTERY_ADC_VREF_MV / BATTERY_ADC_MAX * 2;
+		return (uint16_t)(voltage_mv);
 	}
 
 	uint8_t
