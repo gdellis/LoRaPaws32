@@ -17,6 +17,8 @@ jobs:
       pull-requests: write
       issues: write
     
+    timeout-minutes: 60
+    
     uses: ./.github/workflows/opencode.yml
     
     with:
