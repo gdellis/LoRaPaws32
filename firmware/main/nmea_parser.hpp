@@ -72,13 +72,13 @@ nmea_parse_field (const char* nmea, int field_idx, char* out, size_t out_len) {
  * @brief Validate NMEA checksum
  * @param nmea NMEA sentence string
  * @param len Length of sentence
- * @return true if checksum valid or absent
+ * @return true if checksum valid, false if invalid or absent
  */
 inline bool
 nmea_validate_checksum (const char* nmea, size_t len) {
 	const char* checksum_ptr = (const char*)memchr (nmea, '*', len);
 	if (!checksum_ptr) {
-		return true;
+		return false;
 	}
 
 	size_t checksum_pos = checksum_ptr - nmea;
@@ -92,7 +92,11 @@ nmea_validate_checksum (const char* nmea, size_t len) {
 	}
 
 	char expected_str[3] = { checksum_ptr[1], checksum_ptr[2], '\0' };
-	uint8_t expected = (uint8_t)strtol (expected_str, NULL, 16);
+	char* endptr = NULL;
+	uint8_t expected = (uint8_t)strtol (expected_str, &endptr, 16);
+	if (endptr == expected_str || *endptr != '\0') {
+		return false;
+	}
 
 	return calculated == expected;
 }
@@ -108,7 +112,7 @@ nmea_parse_gga (const char* nmea, NmeaData& data) {
 	char field[32];
 
 	if (nmea_parse_field (nmea, 6, field, sizeof (field)) > 0) {
-		data.has_fix = (field[0] >= '1' && field[0] <= '9');
+		data.has_fix = (field[0] >= '1' && field[0] <= '6');
 	} else {
 		data.has_fix = false;
 		return false;
