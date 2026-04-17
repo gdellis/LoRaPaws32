@@ -34,9 +34,7 @@ jobs:
       - name: Run OpenCode
         uses: anomalyco/opencode/github@latest
         env:
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
         with:
-          model: ${{ inputs.model || secrets.model }}
-          # use_github_token: true
+          model: ${{ inputs.model }}
           prompt: ${{ inputs.prompt }}
