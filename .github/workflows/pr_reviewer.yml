@@ -8,6 +8,9 @@ concurrency:
   group: pr-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+env:
+  AGENT_MODEL: ${{ secrets.REVIEW_AGENT_MODEL }}
+
 jobs:
   review:
     
@@ -21,7 +24,7 @@ jobs:
     
     with:
       include_pr_context: true
-      model: ${{ secrets.REVIEW_AGENT_MODEL }} 
+      model: $AGENT_MODEL
       prompt: |
         Review this pull request:
         - Verify github actions in PR passed
