@@ -63,7 +63,7 @@ Gps::power_off () {
 bool
 Gps::update () {
 	int len = uart_read_bytes (uart_num_, rx_buffer_, GPS_BUFFER_SIZE - 1, 0);
-	if (len > 0 && (size_t)len < GPS_BUFFER_SIZE) {
+	if (len > 0 && (size_t)len <= GPS_BUFFER_SIZE - 1) {
 		rx_buffer_[len] = '\0';
 		return parse_nmea ((const char*)rx_buffer_, len);
 	}
