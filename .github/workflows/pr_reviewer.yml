@@ -10,17 +10,12 @@ concurrency:
 
 jobs:
   review:
-    
+    uses: ./.github/workflows/opencode.yml
     permissions:
       id-token: write
       contents: write
       pull-requests: write
       issues: write
-    
-    timeout-minutes: 60
-    
-    uses: ./.github/workflows/opencode.yml
-    
     with:
       include_pr_context: true
       model: 'ollama-cloud/minimax-m2.7'
