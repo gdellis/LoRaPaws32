@@ -21,7 +21,6 @@ LedDriver::off () {
 
 void
 LedDriver::toggle () {
-	int level = gpio_get_level (pin_);
-	ESP_ERROR_CHECK (gpio_set_level (pin_, !level));
-	state_ = !level;
+	state_ = !state_;
+	ESP_ERROR_CHECK (gpio_set_level (pin_, state_ ? 1 : 0));
 }
