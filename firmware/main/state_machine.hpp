@@ -35,7 +35,7 @@ class TrackerStateMachine {
 	TrackerStateMachine (Gps& gps, LoRaDriver& lora, Accelerometer& accel, BleServer& ble,
 						 LedDriver& led, BatteryDriver& battery);
 
-	void init ();
+	esp_err_t init ();
 	void run ();
 
 	TrackerState

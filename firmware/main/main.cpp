@@ -65,7 +65,10 @@ app_main (void) {
 	}
 
 	static TrackerStateMachine state_machine (gps, lora, accel, ble, led, battery);
-	state_machine.init ();
+	esp_err_t sm_err = state_machine.init ();
+	if (sm_err != ESP_OK) {
+		ESP_LOGE (TAG, "State machine init failed: %s", esp_err_to_name (sm_err));
+	}
 
 	ESP_LOGI (TAG, "Pet tracker initialized, entering main loop");
 
