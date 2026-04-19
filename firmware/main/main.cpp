@@ -37,43 +37,37 @@ app_main (void) {
 	static LedDriver led (BOARD_LED_PIN);
 
 	static Gps gps (UART_NUM_1);
-	esp_err_t err = gps.init ();
-	if (err != ESP_OK) {
-		ESP_LOGE (TAG, "GPS init failed: %s", esp_err_to_name (err));
+	esp_err_t gps_err = gps.init ();
+	if (gps_err != ESP_OK) {
+		ESP_LOGE (TAG, "GPS init failed: %s", esp_err_to_name (gps_err));
 	}
 
 	static LoRaDriver lora (spi_host_device_t::SPI2_HOST, BOARD_LORA_MOSI_PIN, BOARD_LORA_MISO_PIN,
 							BOARD_LORA_SCK_PIN, BOARD_LORA_NSS_PIN, BOARD_LORA_RESET_PIN,
 							BOARD_LORA_BUSY_PIN, BOARD_LORA_DIO1_PIN);
-	err = lora.init ();
-	if (err != ESP_OK) {
-		ESP_LOGE (TAG, "LoRa init failed: %s", esp_err_to_name (err));
-	}
+	ESP_ERROR_CHECK (lora.init ());
 
 	static Accelerometer accel (I2C_NUM_0, BOARD_ACCEL_INT_PIN);
-	err = accel.init ();
-	if (err != ESP_OK) {
-		ESP_LOGE (TAG, "Accelerometer init failed: %s", esp_err_to_name (err));
+	esp_err_t accel_err = accel.init ();
+	if (accel_err != ESP_OK) {
+		ESP_LOGE (TAG, "Accelerometer init failed: %s", esp_err_to_name (accel_err));
 	}
-	err = accel.enable_motion_interrupt (2000);
-	if (err != ESP_OK) {
-		ESP_LOGE (TAG, "Motion interrupt init failed: %s", esp_err_to_name (err));
+	accel_err = accel.enable_motion_interrupt (2000);
+	if (accel_err != ESP_OK) {
+		ESP_LOGE (TAG, "Motion interrupt init failed: %s", esp_err_to_name (accel_err));
 	}
 
 	static BleServer ble;
-	err = ble.init ();
-	if (err != ESP_OK) {
-		ESP_LOGE (TAG, "BLE init failed: %s", esp_err_to_name (err));
-	}
-	err = ble.start ();
-	if (err != ESP_OK) {
-		ESP_LOGE (TAG, "BLE start failed: %s", esp_err_to_name (err));
+	ESP_ERROR_CHECK (ble.init ());
+	esp_err_t ble_err = ble.start ();
+	if (ble_err != ESP_OK) {
+		ESP_LOGE (TAG, "BLE start failed: %s", esp_err_to_name (ble_err));
 	}
 
 	static BatteryDriver battery;
-	err = battery.init ();
-	if (err != ESP_OK) {
-		ESP_LOGE (TAG, "Battery init failed: %s", esp_err_to_name (err));
+	esp_err_t battery_err = battery.init ();
+	if (battery_err != ESP_OK) {
+		ESP_LOGE (TAG, "Battery init failed: %s", esp_err_to_name (battery_err));
 	}
 
 	static TrackerStateMachine state_machine (gps, lora, accel, ble, led, battery);
