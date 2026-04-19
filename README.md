@@ -15,6 +15,13 @@ This is a meta-repo. The project components are in separate repositories:
 | [lorapaws32-hardware](https://github.com/gdellis/lorapaws32-hardware) | KiCad PCB designs and enclosure files |
 | [lorapaws32-base-station](https://github.com/gdellis/lorapaws32-base-station) | Python Flask web app for Raspberry Pi |
 
+## Quick Start
+
+Clone all repositories at once:
+```bash
+bash clone-all.sh
+```
+
 ## Architecture
 
 ```mermaid

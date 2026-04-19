@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - `.clang-format` configuration for GNU-style C++ formatting (ESP-IDF conventions)
+- `clone-all.sh` script to clone all component repos at once
 - `.clangd/config.yaml` for clangd LSP configuration
 - `.agents/guides/ide-setup.md` - Comprehensive IDE setup guide
 - Pre-commit hooks for clang-format and markdownlint
