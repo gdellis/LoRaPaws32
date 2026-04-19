@@ -28,6 +28,7 @@ struct BleLocationData {
 	uint32_t timestamp;
 	uint8_t valid;
 };
+static_assert(sizeof(BleLocationData) == 17, "BleLocationData must be 17 bytes for BLE");
 
 struct BleAlertData {
 	uint8_t alert_type;
@@ -37,6 +38,7 @@ struct BleAlertData {
 	int32_t altitude;
 	uint32_t timestamp;
 };
+static_assert(sizeof(BleAlertData) == 18, "BleAlertData must be 18 bytes for BLE");
 #pragma pack(pop)
 
 class BleServer {
@@ -44,12 +46,12 @@ class BleServer {
 	BleServer ();
 	~BleServer ();
 
-	esp_err_t init ();
-	esp_err_t start ();
-	esp_err_t stop ();
-	esp_err_t update_location (const BleLocationData& location);
-	esp_err_t send_alert (const BleAlertData& alert);
-	esp_err_t set_device_name (const char* name);
+	[[nodiscard]] esp_err_t init ();
+	[[nodiscard]] esp_err_t start ();
+	[[nodiscard]] esp_err_t stop ();
+	[[nodiscard]] esp_err_t update_location (const BleLocationData& location);
+	[[nodiscard]] esp_err_t send_alert (const BleAlertData& alert);
+	[[nodiscard]] esp_err_t set_device_name (const char* name);
 
 	bool is_connected () const;
 

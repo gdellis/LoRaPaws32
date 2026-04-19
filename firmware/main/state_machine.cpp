@@ -16,13 +16,13 @@ TrackerStateMachine::TrackerStateMachine (Gps& gps, LoRaDriver& lora, Accelerome
 	  lora_ (lora), accel_ (accel), ble_ (ble), led_ (led), battery_ (battery),
 	  geofence_breach_ (false) {}
 
-void
+esp_err_t
 TrackerStateMachine::init () {
 	esp_err_t err = Config::init ();
 	if (err != ESP_OK) {
 		ESP_LOGE (TAG, "Config::init() failed: %s", esp_err_to_name (err));
 		transition_to (TrackerState::ERROR);
-		return;
+		return err;
 	}
 
 	err = Config::load (config_);
@@ -34,6 +34,7 @@ TrackerStateMachine::init () {
 	lora_.set_spreading_factor (config_.spreading_factor);
 
 	transition_to (TrackerState::IDLE);
+	return ESP_OK;
 }
 
 void
@@ -221,7 +222,7 @@ TrackerStateMachine::check_geofence () {
 			alert.longitude = (int32_t)(data.longitude * COORD_SCALE);
 			alert.altitude = (int32_t)(data.altitude * 100);
 			alert.timestamp = (uint32_t)(esp_timer_get_time () / 1000000);
-			ble_.send_alert (alert);
+			ESP_ERROR_CHECK (ble_.send_alert (alert));
 			break;
 		}
 	}
