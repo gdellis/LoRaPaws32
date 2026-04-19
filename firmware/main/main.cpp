@@ -52,17 +52,11 @@ app_main (void) {
 	if (accel_err != ESP_OK) {
 		ESP_LOGE (TAG, "Accelerometer init failed: %s", esp_err_to_name (accel_err));
 	}
-	accel_err = accel.enable_motion_interrupt (2000);
-	if (accel_err != ESP_OK) {
-		ESP_LOGE (TAG, "Motion interrupt init failed: %s", esp_err_to_name (accel_err));
-	}
+	ESP_ERROR_CHECK (accel.enable_motion_interrupt (2000));
 
 	static BleServer ble;
 	ESP_ERROR_CHECK (ble.init ());
-	esp_err_t ble_err = ble.start ();
-	if (ble_err != ESP_OK) {
-		ESP_LOGE (TAG, "BLE start failed: %s", esp_err_to_name (ble_err));
-	}
+	ESP_ERROR_CHECK (ble.start ());
 
 	static BatteryDriver battery;
 	esp_err_t battery_err = battery.init ();
