@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Repository reorganization**: Project split into separate repositories
+  - [lorapaws32-firmware](https://github.com/gdellis/lorapaws32-firmware) - ESP-IDF C++ firmware
+  - [lorapaws32-hardware](https://github.com/gdellis/lorapaws32-hardware) - KiCad PCB designs
+  - [lorapaws32-base-station](https://github.com/gdellis/lorapaws32-base-station) - Python Flask web app
+  - [LoRaPaws32](https://github.com/gdellis/LoRaPaws32) - Meta-repo (docs, contracts)
+- License changed to MIT for code components
+
 ### Added
 
 - `.clang-format` configuration for GNU-style C++ formatting (ESP-IDF conventions)
