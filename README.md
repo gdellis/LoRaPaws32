@@ -1,35 +1,19 @@
 # LoRaPaws32
 
-![LoRaPaws32 Logo](resources/LoRaPaws32-nobg.png)
-
-[![C++](https://img.shields.io/badge/C++-00599C?logo=cpp)](https://isocpp.org/)
-[![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v6.0-green?logo=espressif)](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c6/)
-[![License: Personal Use Only](https://img.shields.io/badge/License-Personal%20Use%20Only-orange.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](LICENSE-DESIGNS)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
-LoRa-based pet tracker using LoRa radio to communicate with a home base station, which forwards data to the cloud.
+LoRa-based pet tracker with GPS tracking, LoRa radio communication, and web UI.
 
-## Features
+## Repositories
 
-- **GPS tracking** with NEO-6M module and ~2.5m accuracy
-- **LoRa radio** (SX1262) for long-range communication to base station
-- **BLE fallback** for direct phone connectivity when in range
-- **Motion detection** via LIS3DH accelerometer for intelligent wake cycles
-- **Deep sleep** for maximum battery life
-- **Web UI** on base station for live tracking and configuration
+This is a meta-repo. The project components are in separate repositories:
 
-## Hardware
-
-| Component | Part |
-|-----------|------|
-| MCU | ESP32-C6 (RISC-V) |
-| LoRa | Seeed Wio-SX1262 for XIAO (915 MHz) |
-| GPS | u-blox NEO-6M |
-| Accelerometer | LIS3DH |
-| Battery | LiPo 500mAh |
-
-See [docs/hardware/DESIGN.md](docs/hardware/DESIGN.md) for full hardware documentation.
+| Repository | Description |
+|------------|-------------|
+| [lorapaws32-firmware](https://github.com/gdellis/lorapaws32-firmware) | ESP-IDF C++ firmware for ESP32-S3/C6 |
+| [lorapaws32-hardware](https://github.com/gdellis/lorapaws32-hardware) | KiCad PCB designs and enclosure files |
+| [lorapaws32-base-station](https://github.com/gdellis/lorapaws32-base-station) | Python Flask web app for Raspberry Pi |
 
 ## Architecture
 
@@ -41,89 +25,23 @@ flowchart LR
     B -->|HTTP| W[Web UI<br/>Flask]
 ```
 
-## Project Structure
+## Contract Documents
 
-```
-LoRaPaws32/
-├── firmware/              # C++ ESP-IDF firmware
-│   ├── CMakeLists.txt
-│   ├── build.sh          # Docker-based build
-│   ├── sdkconfig.defaults
-│   └── main/
-│       └── main.cpp       # Application entry
-├── hardware/              # KiCad PCB designs & enclosure
-│   ├── tracker/          # Pet tracker PCB
-│   ├── base_station/     # Base station PCB
-│   └── enclosure/        # 3D printed case
-├── base_station/         # Python Flask web app
-├── docs/                 # Documentation
-│   ├── hardware/         # Hardware design docs
-│   ├── firmware/         # Firmware docs
-│   ├── datasheets/       # Component datasheets
-│   └── plans/            # Implementation plans
-├── third_party/          # Vendor libraries
-└── .github/workflows/     # CI/CD pipelines
-```
+These documents define the interfaces between components:
 
-## Firmware
-
-Built with C++ and ESP-IDF framework using Docker.
-
-### Prerequisites
-
-- Docker
-
-### Build
-
-```bash
-cd firmware
-./build.sh
-```
-
-### IDE Setup
-
-**Note:** The ESP-IDF framework uses the Xtensa toolchain (Xtensa-specific compiler
-flags like `-mlongcalls`, `-fno-shrink-wrap`, `-fstrict-volatile-bitfields`).
-When using clangd or other GCC-based LSP servers, you may see warnings such as:
-
-```
-Unknown argument '-mlongcalls'; did you mean '-mlong-calls'?
-Unknown argument: '-fno-shrink-wrap'
-Unknown argument: '-fstrict-volatile-bitfields'
-```
-
-These warnings are expected and do not affect the build. They occur because:
-- ESP-IDF compiles with `xtensa-esp-elf-gcc` which accepts Xtensa-specific flags
-- Host-based tests use standard GCC
-- clangd uses host GCC which doesn't recognize these flags
-
-The warnings are cosmetic and can be safely ignored. Actual compilation uses the correct
-toolchain via `idf.py build` or `./build.sh`.
-
-### Flash
-
-```bash
-docker run --rm -v $(pwd):/workspace -w /workspace espressif/idf:v5.3.1 \
-  sh -c ". /opt/esp/idf/export.sh && idf.py -p /dev/ttyACM0 flash monitor"
-```
-
-## Base Station
-
-Python 3 on Raspberry Pi with:
-- Flask web server
-- SQLite database
-- Leaflet.js + OpenStreetMap for live tracking
+| Document | Description |
+|----------|-------------|
+| [docs/hardware/PINOUT.md](docs/hardware/PINOUT.md) | Pin assignments and hardware connections |
+| [docs/PROTOCOL.md](docs/PROTOCOL.md) | LoRa packet binary format specification |
 
 ## Documentation
 
 | Document | Description |
 |----------|-------------|
-| [docs/hardware/DESIGN.md](docs/hardware/DESIGN.md) | Full hardware design |
-| [docs/hardware/BOM.md](docs/hardware/BOM.md) | Bill of materials |
-| [docs/plans/](docs/plans/) | Implementation plans |
-| [docs/firmware/DEPENDENCIES.md](docs/firmware/DEPENDENCIES.md) | Build dependencies |
+| [docs/hardware/PINOUT.md](docs/hardware/PINOUT.md) | Pin assignments and hardware connections |
+| [docs/PROTOCOL.md](docs/PROTOCOL.md) | LoRa packet format between firmware and base station |
 
 ## License
 
-- **Firmware** (`firmware/`): [Personal Use Only](LICENSE)
-- **Hardware & Documentation** (`hardware/`, `docs/`): [CC BY-NC-SA 4.0](LICENSE-DESIGNS)
+- **Code** (firmware, base station): [MIT License](LICENSE)
+- **Hardware designs & documentation**: [CC BY-NC-SA 4.0](LICENSE-DESIGNS)
