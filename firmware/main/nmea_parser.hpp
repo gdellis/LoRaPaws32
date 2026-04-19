@@ -76,6 +76,9 @@ nmea_parse_field (const char* nmea, int field_idx, char* out, size_t out_len) {
  */
 inline bool
 nmea_validate_checksum (const char* nmea, size_t len) {
+	if (!nmea)
+		return false;
+
 	const char* checksum_ptr = (const char*)memchr (nmea, '*', len);
 	if (!checksum_ptr) {
 		return false;
