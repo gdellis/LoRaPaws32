@@ -20,6 +20,7 @@ constexpr uint16_t BLE_MIN_INTERVAL_MS = 20;
 constexpr uint16_t BLE_MAX_INTERVAL_MS = 40;
 constexpr uint16_t BLE_MUTEX_TIMEOUT_MS = 100;
 
+#pragma pack(push, 1)
 struct BleLocationData {
 	int32_t latitude;
 	int32_t longitude;
@@ -36,6 +37,7 @@ struct BleAlertData {
 	int32_t altitude;
 	uint32_t timestamp;
 };
+#pragma pack(pop)
 
 class BleServer {
   public:
